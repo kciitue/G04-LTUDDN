@@ -1,9 +1,10 @@
 SportMarket – Vertical Marketplace Platform
 
 Type: Vertical Marketplace
+
 Category: Niche marketplace platform
 
-Description
+Description:
 SportMarket is a vertical marketplace designed to address specific challenges within the sports equipment industry.
 Unlike general marketplaces, the platform focuses on connecting buyers and specialized sellers within a single domain, enabling more efficient product discovery, communication, and transactions.
 

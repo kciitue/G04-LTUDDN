@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportMarket - Buyer Dashboard Full</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .menu-logo { width: 24px; height: 24px; object-fit: contain; }
+        .section-icon { width: 20px; height: 20px; object-fit: contain; }
+        .btn-icon { width: 16px; height: 16px; object-fit: contain; }
+        .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); }
+        .active-link { background-color: #eff6ff; color: #2563eb !important; font-weight: 600; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+
+    <aside class="w-64 bg-white border-r flex flex-col justify-between p-6 sticky h-screen top-0 z-50">
+        <div>
+            <div class="flex items-center gap-3 mb-10">
+                <img src="/icon/logo.png" alt="Logo" class="w-8 h-8" onerror="this.src='https://ui-avatars.com/api/?name=SM&background=2563eb&color=fff'">
+                <span class="text-xl font-bold text-slate-700">SportMarket</span>
+            </div>
+            <nav class="space-y-4">
+                <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                    <img src="/icon/marketplace.png" class="menu-logo"> Marketplace
+                </a>
+                <button id="nav-orders" class="w-full flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-all p-2 -ml-2 rounded-lg">
+                    <img src="/icon/orders.png" class="menu-logo"> Orders
+                </button>
+                <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                    <img src="/icon/notification.png" class="menu-logo"> Notifications
+                </a>
+                <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                    <img src="/icon/messaging.png" class="menu-logo"> Messaging
+                </a>
+                <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                    <img src="/icon/myreviews.png" class="menu-logo"> My Reviews
+                </a>
+            </nav>
+        </div>
+        <div id="nav-profile" class="flex items-center gap-3 border-t pt-4 cursor-pointer hover:bg-slate-50 p-2 -mx-2 rounded-xl transition-all group">
+            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold uppercase">MT</div>
+            <div><p class="text-sm font-bold text-slate-800">Minh Tuấn</p><p class="text-xs text-gray-400">Buyer</p></div>
+        </div>
+    </aside>
+
+    <div class="flex-1 overflow-y-auto">
+        <main id="screen-profile" class="p-10 max-w-6xl fade-in">
+            <header class="flex items-center gap-3 mb-8">
+                <div class="w-6 h-6 flex flex-col justify-center gap-1 cursor-pointer"><span class="w-full h-0.5 bg-slate-600"></span><span class="w-full h-0.5 bg-slate-600"></span></div>
+                <h1 class="text-2xl font-bold text-slate-800">My Profile</h1>
+            </header>
+            <div class="bg-white rounded-2xl p-8 mb-8 border border-gray-100 card-shadow flex items-center justify-between">
+                <div class="flex items-center gap-6">
+                    <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 text-3xl font-bold uppercase">MT</div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Minh Tuấn</h2>
+                        <div class="flex gap-8 mt-4">
+                            <div class="text-center"><p class="text-xl font-bold text-slate-800">124</p><p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Orders</p></div>
+                            <div class="text-center"><p class="text-xl font-bold text-slate-800">89</p><p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Review</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button class="bg-blue-600 text-white px-8 py-2.5 rounded-xl font-bold text-sm shadow-md flex items-center gap-2">
+                        <img src="/icon/edit.png" class="btn-icon brightness-0 invert"> Edit
+                    </button>
+                    <button class="bg-gray-100 p-2.5 rounded-xl"><img src="/icon/setting.png" class="menu-logo"></button>
+                </div>
+            </div>
+            <div class="grid grid-cols-12 gap-8">
+                <div class="col-span-4 space-y-8">
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 card-shadow">
+                        <div class="flex items-center gap-2 mb-6"><img src="/icon/information.png" class="section-icon"><h3 class="font-bold text-sm text-slate-800">Information</h3></div>
+                        <ul class="space-y-4 text-sm text-slate-600">
+                            <li class="italic font-medium">minhtuan@email.com</li>
+                            <li>+84 912 345 678</li>
+                            <li>Hà Nội, Việt Nam</li>
+                            <li class="font-medium text-slate-500">Joined March 2023</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 card-shadow">
+                        <div class="flex items-center gap-2 mb-6">
+                            <img src="/icon/interest.png" class="section-icon">
+                            <h3 class="font-bold text-sm text-slate-800">Interests</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-semibold">Giày chạy bộ</span>
+                            <span class="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-semibold">Yoga</span>
+                            <span class="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-semibold">Leo núi</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-8">
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 card-shadow">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center gap-2"><img src="/icon/recentorders.png" class="section-icon"><h3 class="font-bold text-sm text-slate-800">Recent Orders</h3></div>
+                            <button onclick="switchTab('orders')" class="text-blue-600 text-sm font-bold">View All →</button>
+                        </div>
+                        <div id="mini-order-list" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <main id="screen-orders" class="p-10 fade-in hidden">
+            <header class="flex justify-between items-start mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Orders</h1>
+                    <div class="mt-4"><h2 class="text-xl font-bold text-slate-800">All Orders</h2><p id="order-count" class="text-sm text-gray-400">0 orders found</p></div>
+                </div>
+                <div class="relative w-80">
+                    <i class="lucide-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                    <input id="search-input" type="text" placeholder="Search orders..." class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                </div>
+            </header>
+            <div class="flex gap-4 mb-8" id="status-filter-group">
+                <button class="filter-btn px-6 py-2 bg-blue-600 text-white rounded-lg font-medium shadow-sm" data-status="All">All</button>
+                <button class="filter-btn px-6 py-2 bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50" data-status="In Delivery">In Delivery</button>
+                <button class="filter-btn px-6 py-2 bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50" data-status="Delivered">Delivered</button>
+                <button class="filter-btn px-6 py-2 bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50" data-status="Cancelled">Cancelled</button>
+            </div>
+            <div id="order-list" class="space-y-4"></div>
+        </main>
+    </div>
+
+    <script>
+        const orders = [
+            { id: 'ORD-2024-1847', name: 'Puma Speedcat Ballet Suede', price: '2.200.000 đ', date: '15 Jan 2024', status: 'In Delivery', time: '2 days ago', img: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=200' },
+            { id: 'ORD-2024-1846', name: 'New Balance 530', price: '1.800.000 đ', date: '14 Jan 2024', status: 'Delivered', time: '1 day ago', img: 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=200' },
+            { id: 'ORD-2024-1845', name: 'Giày leo núi nữ Humtto 110609B', price: '950.000 đ', date: '10 Jan 2024', status: 'Delivered', time: '5 days ago', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200' },
+            { id: 'ORD-2024-1844', name: 'Nike Air Jordan Pro', price: '4.500.000 đ', date: '12 Jan 2024', status: 'In Delivery', time: '3 days ago', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200' },
+            { id: 'ORD-2024-1843', name: 'Adidas Ultraboost 22', price: '3.200.000 đ', date: '8 Jan 2024', status: 'Cancelled', time: '7 days ago', img: 'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=200' }
+        ];
+
+        let currentFilter = 'All';
+        let searchQuery = '';
+
+        const screenProfile = document.getElementById('screen-profile');
+        const screenOrders = document.getElementById('screen-orders');
+        const navOrdersBtn = document.getElementById('nav-orders');
+        const navProfileBtn = document.getElementById('nav-profile');
+
+        function switchTab(screenId) {
+            if (screenId === 'orders') {
+                screenProfile.classList.add('hidden');
+                screenOrders.classList.remove('hidden');
+                navOrdersBtn.classList.add('active-link');
+                renderOrders(); 
+            } else {
+                screenOrders.classList.add('hidden');
+                screenProfile.classList.remove('hidden');
+                navOrdersBtn.classList.remove('active-link');
+            }
+        }
+
+        navOrdersBtn.addEventListener('click', () => switchTab('orders'));
+        navProfileBtn.addEventListener('click', () => switchTab('profile'));
+
+        function getStatusStyle(status) {
+            if (status === 'In Delivery') return 'bg-orange-100 text-orange-600';
+            if (status === 'Delivered') return 'bg-green-100 text-green-600';
+            return 'bg-red-50 text-red-500';
+        }
+
+        function renderOrders() {
+            const container = document.getElementById('order-list');
+            const miniContainer = document.getElementById('mini-order-list');
+            const countElement = document.getElementById('order-count');
+            
+            const filtered = orders.filter(o => {
+                const matchesF = currentFilter === 'All' || o.status === currentFilter;
+                const matchesS = o.name.toLowerCase().includes(searchQuery.toLowerCase()) || o.id.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesF && matchesS;
+            });
+
+            if (countElement) countElement.innerText = `${filtered.length} orders found`;
+            
+            if (container) {
+                container.innerHTML = filtered.map(order => `
+                <div class="bg-white p-4 rounded-xl border border-gray-100 flex items-center justify-between hover:shadow-md transition-all group">
+                    <div class="flex gap-4 items-center">
+                        <img src="${order.img}" class="w-20 h-20 rounded-lg object-cover bg-gray-50 border">
+                        <div>
+                            <h3 class="font-bold text-slate-800 group-hover:text-blue-600">${order.name}</h3>
+                            <p class="text-xs text-gray-400 font-medium mt-1">${order.status} • ${order.time}</p>
+                            <p class="text-blue-600 font-bold mt-2">${order.price}</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="font-bold text-sm text-slate-700">${order.id}</p>
+                        <p class="text-xs text-gray-400 mt-1">${order.date}</p>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <span class="px-4 py-1 text-[11px] font-bold rounded-full uppercase tracking-wider ${getStatusStyle(order.status)}">${order.status}</span>
+                        <button class="p-2 hover:bg-blue-50 rounded-lg text-gray-300 group-hover:text-blue-500 transition-all"><i class="lucide-chevron-right w-6 h-6"></i></button>
+                    </div>
+                </div>`).join('');
+            }
+            
+            if (miniContainer) {
+                miniContainer.innerHTML = orders.slice(0, 3).map(order => `
+                <div class="flex items-center justify-between p-4 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100">
+                    <div class="flex items-center gap-4">
+                        <img src="${order.img}" class="w-14 h-14 rounded-lg object-cover bg-slate-50 border">
+                        <div><h4 class="font-bold text-slate-800 text-sm">${order.name}</h4><p class="text-blue-600 font-bold text-sm mt-1">${order.price}</p></div>
+                    </div>
+                    <span class="bg-green-50 text-green-600 text-[10px] font-black uppercase px-3 py-1 rounded-md ${getStatusStyle(order.status)}">${order.status}</span>
+                </div>`).join('');
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderOrders();
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-blue-600', 'text-white', 'shadow-sm');
+                    b.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
+                });
+                this.classList.replace('bg-white', 'bg-blue-600');
+                this.classList.replace('text-gray-600', 'text-white');
+                this.classList.remove('border-gray-200');
+                currentFilter = this.dataset.status;
+                renderOrders();
+            });
+        });
+
+        renderOrders();
+        switchTab('profile');
+    </script>
+</body>
+</html>

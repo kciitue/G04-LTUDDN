@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymGear VN - Top Selling Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .card-shadow { box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04); }
+        .active-link {
+            background-color: #eff6ff;
+            color: #2563eb !important;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+
+    <aside class="w-64 bg-white border-r flex flex-col p-6 sticky h-screen top-0 z-50">
+        <div class="flex items-center gap-3 mb-10">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">SM</div>
+            <span class="text-xl font-bold text-slate-700">SportMarket</span>
+        </div>
+        
+        <nav class="space-y-4 flex-1">
+            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Seller Profile
+            </a>
+            <a href="sellersalesvg.html" class="flex items-center gap-3 active-link p-2 -ml-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                Sales
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                Product
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Messaging
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Scheduling
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M7 18.66A9 9 0 1 1 17 18.66"/><path d="M9 10a3 3 0 1 0 6 0"/><path d="M12 14v4"/></svg>
+                My Reviews
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-500 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                Setting
+            </a>
+        </nav>
+
+        <div class="flex items-center gap-3 border-t pt-4">
+            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold uppercase">GV</div>
+            <div>
+                <p class="text-sm font-bold text-slate-800">GymGear VN</p>
+                <p class="text-xs text-gray-400">Seller</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-800"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                <h1 class="text-2xl font-bold text-slate-800">Sales</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex bg-white border rounded-lg p-1 text-[13px] font-medium text-slate-500 shadow-sm">
+                    <button class="px-4 py-1.5 bg-gray-50 text-slate-800 rounded-md font-bold">Today</button>
+                    <button class="px-4 py-1.5 hover:text-blue-600">This Week</button>
+                    <button class="px-4 py-1.5 hover:text-blue-600">This Month</button>
+                    <button class="px-4 py-1.5 hover:text-blue-600">This Year</button>
+                </div>
+                <button class="bg-blue-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 text-xs font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                    Export
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Total Products</p><h3 class="text-xl font-bold text-slate-800">342</h3></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="p-3 bg-green-50 text-green-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Total Revenue</p><h3 class="text-xl font-bold text-slate-800">$124,500</h3></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Total Sold</p><h3 class="text-xl font-bold text-slate-800">2,847</h3></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-5">
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Avg Rating</p><h3 class="text-xl font-bold text-slate-800">4.9★</h3></div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center gap-2">
+                    <span class="p-1.5 bg-orange-50 text-orange-500 rounded-lg">🔥</span>
+                    <h2 class="font-bold text-slate-800">Top Selling Products</h2>
+                </div>
+                <div class="flex gap-4">
+                    <div class="relative w-64">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </span>
+                        <input type="text" id="searchInput" placeholder="Search products..." class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                    </div>
+                    <select id="sortSelect" class="bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-medium text-slate-700 outline-none shadow-sm cursor-pointer">
+                        <option value="best">Sort by: Best Selling</option>
+                        <option value="high">Sort by: Highest Revenue</option>
+                        <option value="low">Sort by: Lowest Revenue</option>
+                    </select>
+                </div>
+            </div>
+
+            <table class="w-full text-left" id="productTable">
+                <thead>
+                    <tr class="text-[11px] text-slate-400 uppercase font-black tracking-widest border-b border-gray-50">
+                        <th class="pb-4 px-2">#</th>
+                        <th class="pb-4">Product</th>
+                        <th class="pb-4 text-center">Sold</th>
+                        <th class="pb-4 text-center">Revenue</th>
+                        <th class="pb-4 text-center">Rating</th>
+                        <th class="pb-4 text-center">Stock</th>
+                        <th class="pb-4 text-right pr-6">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-[13px] font-bold text-slate-700">
+                    <tr class="border-b border-gray-50 hover:bg-slate-50 transition-colors" data-sold="342" data-price="64800">
+                        <td class="py-5 px-2 text-blue-500">1</td>
+                        <td class="py-5 flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=100" class="w-12 h-12 rounded-xl object-cover">
+                            <div><p class="product-name">Nike Air Jordan Pro</p><p class="text-[10px] text-slate-400 font-normal">SKU: NKJ-2024-001</p></div>
+                        </td>
+                        <td class="text-center">342</td>
+                        <td class="text-center text-green-600 font-extrabold">$64.8K</td>
+                        <td class="text-center">⭐ 4.9</td>
+                        <td class="text-center"><span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[10px] uppercase">In Stock</span></td>
+                        <td class="text-right pr-6 text-slate-300">•••</td>
+                    </tr>
+                    <tr class="border-b border-gray-50 hover:bg-slate-50 transition-colors" data-sold="289" data-price="23100">
+                        <td class="py-5 px-2 text-blue-500">2</td>
+                        <td class="py-5 flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100" class="w-12 h-12 rounded-xl object-cover">
+                            <div><p class="product-name">Pro Compression Set</p><p class="text-[10px] text-slate-400 font-normal">SKU: PCS-2024-012</p></div>
+                        </td>
+                        <td class="text-center">289</td>
+                        <td class="text-center text-green-600 font-extrabold">$23.1K</td>
+                        <td class="text-center">⭐ 4.8</td>
+                        <td class="text-center"><span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[10px] uppercase">In Stock</span></td>
+                        <td class="text-right pr-6 text-slate-300">•••</td>
+                    </tr>
+                    <tr class="border-b border-gray-50 hover:bg-slate-50 transition-colors" data-sold="178" data-price="26700">
+                        <td class="py-5 px-2 text-blue-500">3</td>
+                        <td class="py-5 flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2ec617?w=100" class="w-12 h-12 rounded-xl object-cover">
+                            <div><p class="product-name">Premium Dumbbell Set</p><p class="text-[10px] text-slate-400 font-normal">SKU: PDS-2024-008</p></div>
+                        </td>
+                        <td class="text-center">178</td>
+                        <td class="text-center text-green-600 font-extrabold">$26.7K</td>
+                        <td class="text-center">⭐ 5.0</td>
+                        <td class="text-center"><span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-[10px] uppercase">Low Stock</span></td>
+                        <td class="text-right pr-6 text-slate-300">•••</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="flex justify-between items-center mt-8">
+                <p class="text-sm text-slate-400 font-medium p-1">Showing 1-3 of 342 products</p>
+                <div class="flex items-center gap-2 p-1">
+                    <button class="w-8 h-8 flex items-center justify-center border rounded-lg text-slate-400 hover:bg-gray-50"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+                    <button class="w-8 h-8 bg-blue-600 text-white rounded-lg">1</button>
+                    <button class="w-8 h-8 border rounded-lg hover:bg-gray-50">2</button>
+                    <button class="w-8 h-8 border rounded-lg hover:bg-gray-50">3</button>
+                    <span class="text-slate-300">...</span>
+                    <button class="w-8 h-8 border rounded-lg hover:bg-gray-50">57</button>
+                    <button class="w-8 h-8 flex items-center justify-center border rounded-lg hover:bg-gray-50"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function searchTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelectorAll("#productTable tbody tr");
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+
+        function sortTable() {
+            let table = document.getElementById("productTable");
+            let tbody = table.querySelector("tbody");
+            let rows = Array.from(tbody.rows);
+            let sortBy = document.getElementById("sortSelect").value;
+
+            rows.sort((a, b) => {
+                let valA, valB;
+                if (sortBy === "best") {
+                    valA = parseInt(a.getAttribute("data-sold"));
+                    valB = parseInt(b.getAttribute("data-sold"));
+                    return valB - valA;
+                } else if (sortBy === "high") {
+                    valA = parseInt(a.getAttribute("data-price"));
+                    valB = parseInt(b.getAttribute("data-price"));
+                    return valB - valA;
+                } else if (sortBy === "low") {
+                    valA = parseInt(a.getAttribute("data-price"));
+                    valB = parseInt(b.getAttribute("data-price"));
+                    return valA - valB;
+                }
+                return 0;
+            });
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        document.getElementById("searchInput").addEventListener("keyup", searchTable);
+        document.getElementById("sortSelect").addEventListener("change", sortTable);
+    </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportMarket - Top Selling Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .active-link { background-color: #eff6ff; color: #2563eb !important; font-weight: 600; }
+        .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); }
+    </style>
+</head>
+<body class="bg-gray-50 flex min-h-screen">
+
+    <aside class="w-64 bg-white border-r flex flex-col p-6 sticky h-screen top-0">
+        <div class="flex items-center gap-3 mb-10">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">SM</div>
+            <span class="text-xl font-bold text-slate-700 tracking-tight">SportMarket</span>
+        </div>
+        <nav class="space-y-4 flex-1">
+            <a href="#" class="flex items-center gap-3 text-gray-400 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-400 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Seller Profile
+            </a>
+            <a href="sellersalesvg.html" class="flex items-center gap-3 active-link p-2 -ml-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                Sales
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-400 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                Product
+            </a>
+            <a href="#" class="flex items-center gap-3 text-gray-400 hover:text-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Messaging
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-800"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                <h1 class="text-2xl font-bold text-slate-800">Sales</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex bg-white border rounded-lg p-1 text-[13px] font-medium text-slate-500 shadow-sm">
+                    <button class="px-4 py-1.5 bg-gray-50 text-slate-800 rounded-md font-bold">Today</button>
+                    <button class="px-4 py-1.5 hover:text-blue-600">This Week</button>
+                    <button class="px-4 py-1.5 hover:text-blue-600">This Month</button>
+                    <button class="px-4 py-1.5 hover:text-blue-600">This Year</button>
+                </div>
+                <button class="bg-blue-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 text-xs font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                    Export
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 card-shadow flex items-center gap-5">
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Total Products</p><h3 class="text-xl font-bold text-slate-800">342</h3></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 card-shadow flex items-center gap-5">
+                <div class="p-3 bg-green-50 text-green-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Total Revenue</p><h3 class="text-xl font-bold text-slate-800">$124,500</h3></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 card-shadow flex items-center gap-5">
+                <div class="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Total Sold</p><h3 class="text-xl font-bold text-slate-800">2,847</h3></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 card-shadow flex items-center gap-5">
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <div><p class="text-xs text-slate-400 font-medium mb-1">Avg Rating</p><h3 class="text-xl font-bold text-slate-800">4.9★</h3></div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 card-shadow">
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center gap-2">
+                    <span class="p-1.5 bg-orange-50 text-orange-500 rounded-lg">🔥</span>
+                    <h2 class="font-bold text-slate-800">Top Selling Products</h2>
+                </div>
+                <div class="flex gap-4">
+                    <div class="relative w-64">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </span>
+                        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search products..." class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                    </div>
+                    <select id="sortSelect" onchange="sortTable()" class="bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-medium text-slate-700 outline-none shadow-sm cursor-pointer">
+                        <option value="best">Sort by: Best Selling</option>
+                        <option value="high">Sort by: Highest Price</option>
+                        <option value="low">Sort by: Lowest Price</option>
+                    </select>
+                </div>
+            </div>
+
+            <table class="w-full text-left" id="productTable">
+                <thead>
+                    <tr class="text-[11px] text-slate-400 uppercase font-black tracking-widest border-b border-gray-50">
+                        <th class="pb-4 px-2">#</th>
+                        <th class="pb-4">Product</th>
+                        <th class="pb-4 text-center">Sold</th>
+                        <th class="pb-4 text-center">Revenue</th>
+                        <th class="pb-4 text-center">Rating</th>
+                        <th class="pb-4 text-center">Stock</th>
+                        <th class="pb-4 text-right pr-6">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-[13px] font-bold text-slate-700">
+                    <tr class="border-b border-gray-50 hover:bg-slate-50 transition-colors" data-sold="342" data-price="190">
+                        <td class="py-5 px-2 text-blue-500">1</td>
+                        <td class="py-5 flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=100" class="w-12 h-12 rounded-xl object-cover">
+                            <div><p class="product-name">Nike Air Jordan Pro</p><p class="text-[10px] text-slate-400 font-normal">SKU: NKJ-2024-001</p></div>
+                        </td>
+                        <td class="text-center">342</td>
+                        <td class="text-center text-green-600 font-extrabold">$64.8K</td>
+                        <td class="text-center">⭐ 4.9</td>
+                        <td class="text-center"><span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[10px] uppercase">In Stock</span></td>
+                        <td class="text-right pr-6 text-slate-300">•••</td>
+                    </tr>
+                    <tr class="border-b border-gray-50 hover:bg-slate-50 transition-colors" data-sold="289" data-price="80">
+                        <td class="py-5 px-2 text-blue-500">2</td>
+                        <td class="py-5 flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100" class="w-12 h-12 rounded-xl object-cover">
+                            <div><p class="product-name">Pro Compression Set</p><p class="text-[10px] text-slate-400 font-normal">SKU: PCS-2024-012</p></div>
+                        </td>
+                        <td class="text-center">289</td>
+                        <td class="text-center text-green-600 font-extrabold">$23.1K</td>
+                        <td class="text-center">⭐ 4.8</td>
+                        <td class="text-center"><span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[10px] uppercase">In Stock</span></td>
+                        <td class="text-right pr-6 text-slate-300">•••</td>
+                    </tr>
+                    <tr class="border-b border-gray-50 hover:bg-slate-50 transition-colors" data-sold="178" data-price="150">
+                        <td class="py-5 px-2 text-blue-500">3</td>
+                        <td class="py-5 flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2ec617?w=100" class="w-12 h-12 rounded-xl object-cover">
+                            <div><p class="product-name">Premium Dumbbell Set</p><p class="text-[10px] text-slate-400 font-normal">SKU: PDS-2024-008</p></div>
+                        </td>
+                        <td class="text-center">178</td>
+                        <td class="text-center text-green-600 font-extrabold">$26.7K</td>
+                        <td class="text-center">⭐ 5.0</td>
+                        <td class="text-center"><span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-[10px] uppercase">Low Stock</span></td>
+                        <td class="text-right pr-6 text-slate-300">•••</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="flex justify-between items-center mt-8">
+                <p class="text-sm text-slate-400 font-medium border-2 border-red-500 p-1">Showing 1-6 of 342 products</p>
+                <div class="flex items-center gap-2 border-2 border-red-500 p-1">
+                    <button class="w-8 h-8 flex items-center justify-center border rounded-lg text-slate-400 hover:bg-gray-50"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+                    <button class="w-8 h-8 bg-blue-600 text-white rounded-lg">1</button>
+                    <button class="w-8 h-8 border rounded-lg hover:bg-gray-50">2</button>
+                    <button class="w-8 h-8 border rounded-lg hover:bg-gray-50">3</button>
+                    <span class="text-slate-300">...</span>
+                    <button class="w-8 h-8 border rounded-lg hover:bg-gray-50">57</button>
+                    <button class="w-8 h-8 flex items-center justify-center border rounded-lg hover:bg-gray-50"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function searchTable() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let rows = document.querySelector("#productTable tbody").rows;
+            for (let row of rows) {
+                row.style.display = row.innerText.toLowerCase().includes(input) ? "" : "none";
+            }
+        }
+
+        function sortTable() {
+            let table = document.getElementById("productTable");
+            let tbody = table.querySelector("tbody");
+            let rows = Array.from(tbody.rows);
+            let sortBy = document.getElementById("sortSelect").value;
+
+            rows.sort((a, b) => {
+                let valA = parseInt(a.getAttribute(sortBy === "best" ? "data-sold" : "data-price"));
+                let valB = parseInt(b.getAttribute(sortBy === "best" ? "data-sold" : "data-price"));
+                return sortBy === "low" ? valA - valB : valB - valA;
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    </script>
+</body>
+</html> -->

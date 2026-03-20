@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reply to Review - SportMarket</title>
+    <!-- Modern Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modern Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --bg-body: #f3f4f6;
+            --bg-surface: #ffffff;
+            --border: #e5e7eb;
+            --star-filled: #f59e0b;
+            --star-empty: #e5e7eb;
+            --font-family: 'Inter', sans-serif;
+            --sidebar-width: 240px;
+            --shadow-card: 0 1px 3px rgba(0,0,0,0.05);
+            --border-radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family); background-color: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width); background-color: var(--bg-surface); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; position: fixed; height: 100vh; top: 0; left: 0; z-index: 10;
+        }
+        .logo-section { padding: 24px; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { color: var(--primary); font-size: 28px; }
+        .logo-text { font-size: 18px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+
+        .nav-menu { flex: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: all 0.2s ease; }
+        .nav-item:hover { background-color: var(--bg-body); color: var(--text-main); }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+        .nav-item.active i { color: var(--primary); }
+
+        /* User Profile Dropdown */
+        .user-profile { margin-top: auto; padding: 20px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; cursor: pointer; position: relative; transition: background 0.2s; }
+        .user-profile:hover { background: var(--bg-body); }
+        .user-profile .avatar { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+        .user-profile .user-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .user-profile .user-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .user-profile .user-role { font-size: 13px; color: var(--text-muted); }
+        .user-profile i.ph-caret-down { color: var(--text-muted); }
+        
+        .profile-dropdown { position: absolute; bottom: calc(100% + 8px); left: 24px; right: 24px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.2s; z-index: 50; }
+        .profile-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+        .dropdown-item:hover { background: var(--bg-body); }
+        .dropdown-item i { font-size: 18px; color: var(--text-muted); }
+        .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+        .text-danger { color: #dc2626; }
+        .text-danger i { color: #dc2626; }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width); flex: 1; padding: 32px 48px; max-width: 1200px;
+        }
+
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 15px; transition: color 0.2s; }
+        .back-link:hover { color: var(--text-main); }
+        .report-btn { display: inline-flex; align-items: center; gap: 8px; color: #ef4444; background: #fef2f2; border: 1px solid #fecaca; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+        .report-btn:hover { background: #fee2e2; }
+
+        /* Split Layout Container */
+        .reply-container {
+            background: var(--bg-surface); border-radius: var(--border-radius); box-shadow: var(--shadow-card);
+            border: 1px solid var(--border); display: flex; min-height: 600px; overflow: hidden;
+        }
+        
+        /* Left Column */
+        .left-col { flex: 1; padding: 48px; background: white; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .left-title { font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 32px; }
+        .customer-info { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+        .customer-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+        .customer-details { display: flex; flex-direction: column; gap: 4px; }
+        .customer-name { font-size: 16px; font-weight: 700; color: var(--text-main); }
+        .customer-meta { display: flex; align-items: center; gap: 8px; }
+        .stars { display: flex; color: var(--star-filled); font-size: 14px; gap: 2px; }
+        .stars .empty { color: var(--star-empty); }
+        .review-date { font-size: 13px; color: var(--text-light); }
+        .review-text { font-size: 16px; line-height: 1.6; color: var(--text-muted); margin-bottom: 40px; }
+
+        /* Gallery */
+        .review-images-gallery { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+        .review-image { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+
+        .purchased-card { display: flex; gap: 16px; padding: 16px; border: 1px solid #f3f4f6; border-radius: 8px; background: #fafafa; }
+        .purchased-img { width: 64px; height: 64px; border-radius: 4px; object-fit: cover; background: #f9ecee; border: 1px solid var(--border); }
+        .purchased-details { display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+        .purchased-badge { font-size: 10px; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; text-transform: uppercase; }
+        .purchased-name { font-size: 15px; font-weight: 700; color: var(--text-main); }
+        .purchased-variants { font-size: 13px; color: var(--text-light); }
+
+        /* Split Interface (Cards style) */
+        .reply-container { display: flex; gap: 24px; max-width: 1200px; margin: 0 auto; width: 100%; align-items: stretch; }
+        
+        /* Left Column */
+        .left-col, .right-col {
+            background: white; border-radius: 12px; border: 1px solid var(--border); padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); flex: 1; display: flex; flex-direction: column;
+        }
+        .left-title, .right-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 24px; }
+        
+        /* Blue Info Alert */
+        .blue-alert {
+            display: flex; align-items: center; gap: 12px; background: #eff6ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;
+            color: var(--primary); font-size: 14px; font-weight: 500;
+        }
+        
+        .right-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+        .reply-textarea {
+            width: 100%; flex: 1; min-height: 180px; border: 1px solid var(--border); border-radius: 8px; padding: 20px; font-family: inherit; font-size: 14px;
+            resize: vertical; background: white; outline: none; transition: border-color 0.2s; margin-bottom: 12px; line-height: 1.6;
+        }
+        .reply-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .reply-textarea::placeholder { color: #9ca3af; }
+
+        /* Tips Card */
+        .tips-card { background: #fefce8; border: 1px solid #fef08a; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+        .tips-title { font-size: 14px; font-weight: 700; color: #854d0e; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+        .tips-list { margin: 0; padding-left: 18px; color: #a16207; font-size: 13px; font-weight: 500; line-height: 1.6; }
+        .tips-list li { margin-bottom: 4px; }
+        .tips-list li::marker { color: #ca8a04; }
+
+        .reply-actions { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+        .char-count { margin-right: auto; color: #9ca3af; font-size: 12px; font-weight: 500; }
+        .btn { padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; outline: none; }
+        .btn-cancel { background: white; border: 1px solid var(--border); color: var(--text-main); padding: 12px 40px; }
+        .btn-cancel:hover { background: var(--bg-body); }
+        .btn-post { background: var(--primary); border: 1px solid var(--primary); color: white; padding: 12px 40px; }
+        .btn-post:hover { background: #1d4ed8; }
+
+        /* Report Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; z-index: 10000; opacity: 0; transition: opacity 0.2s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-card { background: white; border-radius: 12px; width: 440px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); transform: translateY(20px); transition: transform 0.2s; max-width: 90%; }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 18px; font-weight: 700; color: var(--text-main); }
+        .modal-close { background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; }
+        .modal-close:hover { color: var(--text-main); }
+        .modal-body { margin-bottom: 24px; }
+        .modal-body p { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+        .reason-label { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 15px; color: var(--text-main); cursor: pointer; padding: 12px; border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s; }
+        .reason-label:hover { background: var(--bg-body); border-color: #d1d5db; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+
+        /* Reply Success State */
+        .reply-success {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 32px;
+            text-align: center;
+            gap: 16px;
+            flex: 1;
+        }
+        .reply-success-icon {
+            width: 72px; height: 72px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; color: #16a34a;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .reply-success h3 { font-size: 20px; font-weight: 700; color: var(--text-main); }
+        .reply-success p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Role Switcher -->
+    <a href="review-html-page.html" style="position: fixed; bottom: 24px; right: 24px; background: #111827; color: white; padding: 12px 24px; border-radius: 50px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 9999; font-size: 14px; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; transition: transform 0.2s;">
+        <i class="ph ph-arrows-left-right" style="font-size: 18px;"></i> Qua góc nhìn Người Mua
+    </a>
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <a href="index.html" class="logo-section">
+            <div class="logo-icon"><i class="ph-fill ph-basketball"></i></div>
+            <div class="logo-text">SportMarket</div>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-item"><i class="ph ph-squares-four"></i> Dashboard</a>
+            <a href="#" class="nav-item"><i class="ph ph-chart-line-up"></i> Sales</a>
+            <a href="#" class="nav-item"><i class="ph ph-package"></i> Products</a>
+
+            <a href="seller-reviews.html" class="nav-item active"><i class="ph ph-star"></i> My Reviews</a>
+            <a href="#" class="nav-item"><i class="ph ph-gear"></i> Setting</a>
+        </nav>
+
+        <div class="user-profile" id="userProfileBtn">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=80" alt="GymGear VN" class="avatar">
+            <div class="user-info">
+                <span class="user-name">GymGear VN</span>
+                <span class="user-role">Seller</span>
+            </div>
+            <i class="ph ph-caret-down"></i>
+            
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="#" class="dropdown-item"><i class="ph ph-storefront"></i> Shop Profile</a>
+                <a href="#" class="dropdown-item"><i class="ph ph-gear"></i> Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="index.html" class="dropdown-item text-danger"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+        <!-- Top bar -->
+        <div class="top-header" style="max-width: 1200px; margin: 0 auto 24px auto;">
+            <a href="seller-reviews.html" class="back-link" style="color:var(--primary); font-weight:600;"><i class="ph ph-arrow-left"></i> Back to Reviews</a>
+            <button class="report-btn" style="background:white; border:1px solid #ef4444; color:#ef4444; border-radius:6px; font-weight:600; padding:8px 16px; font-size:13px;" onclick="openReportModal()"><i class="ph ph-flag"></i> Report Review</button>
+        </div>
+
+        <!-- Split Interface -->
+        <div class="reply-container">
+            <!-- Left Column: Customer Review -->
+            <div class="left-col">
+                <h2 class="left-title">Customer Review</h2>
+                
+                <div class="customer-info">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Trần Minh Hà" class="customer-avatar" id="dynAvatar">
+                    <div class="customer-details">
+                        <span class="customer-name" id="dynName">Trần Minh Hà</span>
+                        <div class="customer-meta">
+                            <div class="stars" id="dynStars">
+                                <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star empty"></i><i class="ph-fill ph-star empty"></i><i class="ph-fill ph-star empty"></i>
+                            </div>
+                            <span class="review-date" id="dynDate">Mar 5, 2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="review-text" id="dynText">Giày bị móp hộp do vận chuyển, form hơi chật so với size chuẩn. Rất thất vọng vì mình đang cần gấp để đi sự kiện.</p>
+                <div id="dynImagesContainer"></div>
+
+                <!-- Purchased product context -->
+                <div class="purchased-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Product" class="purchased-img" id="dynProdImg">
+                    <div class="purchased-details">
+                        <span class="purchased-badge">Purchased Product</span>
+                        <h4 class="purchased-name" id="dynProdName">Nike Air Max 90</h4>
+                        <span class="purchased-variants">Variant: Default</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Public Reply -->
+            <div class="right-col">
+                <h2 class="right-title">Your Public Response</h2>
+                
+                <div class="blue-alert">
+                    <i class="ph ph-info" style="font-size:18px;"></i>
+                    This response will be visible to all customers on your product page
+                </div>
+                
+                <textarea class="reply-textarea" id="replyInput" placeholder="Write your response to the customer..."></textarea>
+                
+                <div class="char-count" style="text-align: right; margin-bottom: 16px;"><span id="charCounter">0</span>/1000 characters</div>
+                
+                <!-- Tips Section -->
+                <div class="tips-card">
+                    <div class="tips-title"><i class="ph-fill ph-lightbulb"></i> Response Tips</div>
+                    <ul class="tips-list">
+                        <li>Thank the customer for their feedback</li>
+                        <li>Address specific concerns mentioned in the review</li>
+                        <li>Offer a solution or explain how you'll improve</li>
+                        <li>Keep your tone professional and empathetic</li>
+                    </ul>
+                </div>
+
+                <div class="reply-actions">
+                    <button class="btn btn-cancel" onclick="window.location.href='seller-reviews.html'">Save Draft</button>
+                    <button class="btn btn-post" onclick="submitReply()">Post Reply</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div><i class="ph-fill ph-warning" style="color:#ef4444; margin-right:8px; vertical-align:middle;"></i>Report Review</div>
+                <button class="modal-close" onclick="closeReportModal()"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Why are you reporting this review? Our team will inspect it against platform guidelines.</p>
+                <label class="reason-label"><input type="radio" name="reportReason" value="spam" checked> Spam or advertising content</label>
+                <label class="reason-label"><input type="radio" name="reportReason" value="inappropriate"> Inappropriate or offensive language</label>
+                <label class="reason-label"><input type="radio" name="reportReason" value="fake"> Fake review from a competitor</label>
+                <label class="reason-label"><input type="radio" name="reportReason" value="other"> Other reason</label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="btn btn-post" style="background:#ef4444; border-color:#ef4444;" onclick="submitReportRequest()">Submit Report</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inject Dynamic Content from LocalStorage
+        window.onload = () => {
+            const ctxStr = localStorage.getItem('sportmarket_current_reply_context');
+            if(ctxStr) {
+                try {
+                    const ctx = JSON.parse(ctxStr);
+                    document.getElementById('dynName').textContent = ctx.buyerName;
+                    document.getElementById('dynDate').textContent = ctx.timeStr;
+                    document.getElementById('dynText').textContent = ctx.text;
+                    document.getElementById('dynProdName').textContent = ctx.prodName;
+                    document.getElementById('dynProdImg').src = ctx.prodImg;
+                    if(ctx.avatar) document.getElementById('dynAvatar').src = ctx.avatar;
+                    
+                    let starHTML = '';
+                    for(let i=1; i<=5; i++) {
+                        starHTML += i <= ctx.stars ? '<i class="ph-fill ph-star"></i>' : '<i class="ph-fill ph-star empty"></i>';
+                    }
+                    document.getElementById('dynStars').innerHTML = starHTML;
+
+                    if (ctx.images && ctx.images.length > 0) {
+                        const imgContainer = document.getElementById('dynImagesContainer');
+                        imgContainer.innerHTML = `<div class="review-images-gallery">
+                            ${ctx.images.map(img => {
+                                let safeImg = img.startsWith('blob:') ? 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=400&q=80' : img;
+                                return `<img src="${safeImg}" class="review-image" />`;
+                            }).join('')}
+                        </div>`;
+                    }
+                } catch(e) {}
+            }
+        };
+
+        // Character counter logic
+        const input = document.getElementById('replyInput');
+        const counter = document.getElementById('charCounter');
+
+        input.addEventListener('input', () => {
+            counter.innerText = input.value.length;
+        });
+
+        // Submit mock logic
+        function submitReply() {
+            if (input.value.trim().length === 0) {
+                alert("Please enter a reply before posting.");
+                return;
+            }
+            const btn = document.querySelector('.btn-post');
+            btn.textContent = 'Posting...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // Hide reply form, show success
+                document.querySelector('.right-col').innerHTML = `
+                    <div class="reply-success" style="display:flex;">
+                        <div class="reply-success-icon"><i class="ph-fill ph-check-circle"></i></div>
+                        <h3>Phản hồi đã được đăng!</h3>
+                        <p>Phản hồi của bạn đã được đăng công khai.<br>Khách hàng sẽ thấy phản hồi này ngay bên dưới review của họ.</p>
+                        <div style="display:flex;gap:12px;margin-top:8px;">
+                            <a href="seller-reviews.html" class="btn btn-post" style="text-decoration:none;">Về danh sách Review</a>
+                        </div>
+                    </div>
+                `;
+            }, 600);
+        }
+
+        // Report Modal Logic
+        const reportModal = document.getElementById('reportModal');
+        window.openReportModal = () => reportModal.classList.add('active');
+        window.closeReportModal = () => reportModal.classList.remove('active');
+        
+        window.submitReportRequest = () => {
+            const ctxStr = localStorage.getItem('sportmarket_current_reply_context');
+            if(ctxStr) {
+                try {
+                    const ctx = JSON.parse(ctxStr);
+                    const reported = JSON.parse(localStorage.getItem('sportmarket_reported_reviews')) || [];
+                    if(!reported.includes(ctx.id)) {
+                        reported.push(ctx.id);
+                        localStorage.setItem('sportmarket_reported_reviews', JSON.stringify(reported));
+                    }
+                } catch(e) {}
+            }
+            alert('Your report has been received! Our moderation team will review this case within 24 hours.');
+            window.location.href = 'seller-reviews.html';
+        };
+
+        // Dropdown Logic
+        const userProfileBtn = document.getElementById('userProfileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        if(userProfileBtn && profileDropdown) {
+            userProfileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', (e) => {
+                if(!userProfileBtn.contains(e.target)) profileDropdown.classList.remove('show');
+            });
+        }
+    </script>
+</body>
+</html>

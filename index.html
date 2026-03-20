@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - SportMarket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --bg-body: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body, html { height: 100vh; width: 100vw; background: var(--bg-body); overflow: hidden; }
+
+        .login-container { display: flex; height: 100vh; width: 100vw; }
+
+        /* ── Hero ── */
+        .left-hero {
+            flex: 1; position: relative;
+            background: url('https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.08) 60%, transparent 100%);
+        }
+        .hero-content { position: absolute; bottom: 56px; left: 56px; color: #fff; z-index: 10; }
+        .hero-content h1 { font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; margin-bottom: 16px; }
+        .hero-content p { font-size: 15px; color: rgba(255,255,255,0.8); line-height: 1.6; }
+
+        /* ── Form ── */
+        .right-form { flex: 1; display: flex; align-items: center; justify-content: center; background: var(--bg-body); }
+        .form-wrapper { width: 100%; max-width: 420px; padding: 40px; }
+
+        /* Logo */
+        .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 44px; text-decoration: none; color: var(--text-dark); }
+        .logo-box {
+            width: 36px; height: 36px; border-radius: 9px;
+            background: var(--primary); display: flex; align-items: center;
+            justify-content: center; color: #fff; font-weight: 800; font-size: 14px;
+        }
+        .logo-text { font-size: 20px; font-weight: 700; }
+
+        /* Heading */
+        .form-heading { margin-bottom: 28px; }
+        .form-heading h2 { font-size: 28px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.7px; margin-bottom: 6px; }
+        .form-heading p { font-size: 14px; color: var(--text-light); }
+
+        /* Inputs */
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 7px; }
+        .input-group input {
+            width: 100%; padding: 13px 16px; border: 1.5px solid var(--border-color);
+            border-radius: 8px; font-size: 15px; color: var(--text-dark); outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s; background: #fff;
+        }
+        .input-group input::placeholder { color: #b0bac5; }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.09); }
+
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .password-wrapper input { padding-right: 44px; }
+        .show-pwd { position: absolute; right: 14px; color: #94a3b8; cursor: pointer; font-size: 16px; transition: color 0.2s; }
+        .show-pwd:hover { color: var(--text-dark); }
+
+        /* Remember + Forgot */
+        .form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+        .remember { display: flex; align-items: center; gap: 8px; }
+        .remember input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+        .remember label { font-size: 13px; color: var(--text-light); cursor: pointer; font-weight: 500; }
+        .forgot { font-size: 13px; color: var(--primary); text-decoration: none; font-weight: 600; }
+        .forgot:hover { text-decoration: underline; }
+
+        /* Button */
+        .login-btn {
+            width: 100%; padding: 14px; background: var(--primary);
+            color: #fff; border: none; border-radius: 8px; font-size: 16px;
+            font-weight: 600; cursor: pointer; transition: background 0.22s; margin-bottom: 20px;
+        }
+        .login-btn:hover { background: var(--primary-hover); }
+
+        /* Footer */
+        .form-footer { text-align: center; font-size: 14px; color: var(--text-light); }
+        .form-footer a { color: var(--primary); font-weight: 700; text-decoration: none; margin-left: 4px; }
+        .form-footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 900px) { .left-hero { display: none; } }
+    </style>
+</head>
+<body>
+<div class="login-container">
+
+    <!-- Hero -->
+    <div class="left-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Elevate your<br>game with<br>SportMarket.</h1>
+            <p>The premier destination for elite sportswear<br>and high-performance equipment.</p>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="right-form">
+        <div class="form-wrapper">
+
+            <a href="#" class="logo">
+                <div class="logo-box">SM</div>
+                <span class="logo-text">SportMarket</span>
+            </a>
+
+            <div class="form-heading">
+                <h2>Sign in</h2>
+                <p>Welcome back! Please enter your details.</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                        <i class="far fa-eye show-pwd" id="eyeIcon"></i>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="remember">
+                        <input type="checkbox" id="remember" checked>
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot">Forgot password?</a>
+                </div>
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span id="btnText">Sign In</span>
+                    <span id="btnSpinner" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Signing in...</span>
+                </button>
+            </form>
+
+            <div class="form-footer">
+                Don't have an account? <a href="#">Create one</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle password visibility
+    document.getElementById('eyeIcon').addEventListener('click', function () {
+        const pwd  = document.getElementById('password');
+        const type = pwd.getAttribute('type') === 'password' ? 'text' : 'password';
+        pwd.setAttribute('type', type);
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+
+    // Submit → smart routing based on email
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        document.getElementById('btnText').style.display    = 'none';
+        document.getElementById('btnSpinner').style.display = 'inline';
+        document.getElementById('loginBtn').disabled = true;
+
+        const email = document.getElementById('email').value.toLowerCase();
+        const isSeller = email.includes('seller') || email.includes('shop') || email.includes('store') || email.includes('gymgear');
+        const dest = isSeller ? 'seller-reviews.html' : 'review-html-page.html';
+        setTimeout(() => { window.location.href = dest; }, 1200);
+    });
+</script>
+</body>
+</html>

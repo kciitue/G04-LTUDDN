@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Login - SportMarket</title>
+    <!-- Use Inter font to match the modern, clean look of the mockup -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Dùng một tông màu khác (xanh lá) để phân biệt rạch ròi với Buyer (xanh dương) */
+            --primary-color: #10b981; 
+            --primary-hover: #059669;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --bg-body: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body, html {
+            height: 100vh;
+            width: 100vw;
+            background-color: var(--bg-body);
+            overflow: hidden;
+        }
+
+        .login-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Vùng Form bên TRÁI cho Seller để tạo sự khác biệt nhẹ với Buyer */
+        .right-form {
+            flex: 1; /* Chiếm 50% */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-body);
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+        }
+
+        /* Hình ảnh bên PHẢI cho Seller */
+        .left-hero {
+            flex: 1; /* Chiếm 50% */
+            position: relative;
+            /* Ảnh mang hơi hướng kinh doanh, cửa hàng thể thao cho Seller */
+            background: url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            text-align: right; /* Canh lề phải để hợp tone chuyển đổi */
+            color: #ffffff;
+            z-index: 10;
+        }
+
+        .hero-content h1 {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero-content p {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Header Form */
+        .form-header {
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .logo span {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .form-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .form-header p {
+            font-size: 15px;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        /* Các ô nhập liệu */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text-dark);
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: #fff;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Trường Mật khẩu có icon Eye */
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper input {
+            padding-right: 40px; /* Nhường chỗ cho icon */
+        }
+
+        .show-pwd {
+            position: absolute;
+            right: 15px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+
+        .show-pwd:hover {
+            color: var(--text-dark);
+        }
+
+        /* Checkbox Nhớ mật khẩu */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            margin-right: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* Nút tích trắng bên trong checkbox */
+        .checkbox-group input[type="checkbox"]:checked::after {
+            content: "\f00c"; /* FontAwesome check icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 11px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkbox-group label {
+            font-size: 14px;
+            color: var(--text-light);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Nút Đăng nhập */
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 25px;
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Link Tạo tài khoản */
+        .form-footer {
+            text-align: center;
+        }
+
+        .form-footer p {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Chế độ cho Màn hình nhỏ */
+        @media (max-width: 900px) {
+            .left-hero {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Nửa phải (đẩy sang bên trái): Form đăng nhập cho Cửa hàng -->
+        <div class="right-form">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <div class="logo">
+                        <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;">
+                            <i class="fas fa-store logo-icon"></i>
+                            <span>SportMarket</span>
+                        </a>
+                        <a href="index.html" style="margin-left:auto;font-size:13px;color:#94a3b8;text-decoration:none;display:flex;align-items:center;gap:5px;" title="Quay lại">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </a>
+                    </div>
+                    <h2>Seller Portal</h2>
+                    <p>Đăng nhập với tư cách <strong style="color:#10b981">Người Bán (Seller)</strong></p>
+                </div>
+                
+                <form action="#" method="POST">
+                    <div class="input-group">
+                        <label for="email">Business Email</label>
+                        <!-- Tài khoản Cửa Hàng đã được thế sẵn -->
+                        <input type="email" id="email" value="seller@sportmarket.com" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <div class="password-wrapper">
+                            <!-- Password đã được thế sẵn -->
+                            <input type="password" id="password" value="secretstorepassword" required>
+                            <i class="far fa-eye show-pwd"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember" checked>
+                        <label for="remember">Remember me on this device</label>
+                    </div>
+                    
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <span id="btnText">Access Dashboard</span>
+                        <span id="btnSpinner" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Đang đăng nhập...</span>
+                    </button>
+                </form>
+                
+                <div class="form-footer">
+                    <p>Want to start a store? <a href="#">Register here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nửa trái (đẩy sang phải): Hình ảnh cho Cửa hàng -->
+        <div class="left-hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Grow your<br>business with<br>SportMarket.</h1>
+                <p>Reach millions of athletes worldwide and<br>maximize your sales performance.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Xử lý nút hiển thị mật khẩu
+        const togglePassword = document.querySelector('.show-pwd');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            // Đổi type của input
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Đổi icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Xử lý nộp form -> Redirect sang trang Seller
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Hiệu ứng loading trên nút
+            document.getElementById('btnText').style.display = 'none';
+            document.getElementById('btnSpinner').style.display = 'inline';
+            document.getElementById('loginBtn').disabled = true;
+            // Chuyển hướng sau 1.2 giây (giả lập request)
+            setTimeout(function() {
+                window.location.href = 'seller-reviews.html';
+            }, 1200);
+        });
+    </script>
+</body>
+</html>

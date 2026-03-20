@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews Management - SportMarket</title>
+    <!-- Modern Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modern Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --bg-body: #f3f4f6;
+            --bg-surface: #ffffff;
+            --border: #e5e7eb;
+            --star-filled: #f59e0b;
+            --star-empty: #e5e7eb;
+            --font-family: 'Inter', sans-serif;
+            --sidebar-width: 240px;
+            --shadow-card: 0 1px 3px rgba(0,0,0,0.05);
+            --border-radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family); background-color: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width); background-color: var(--bg-surface); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; position: fixed; height: 100vh; top: 0; left: 0; z-index: 10;
+        }
+        .logo-section { padding: 24px; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { color: var(--primary); font-size: 28px; }
+        .logo-text { font-size: 18px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+
+        .nav-menu { flex: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; color: var(--text-muted);
+            text-decoration: none; font-weight: 500; font-size: 15px; transition: all 0.2s ease;
+        }
+        .nav-item:hover { background-color: var(--bg-body); color: var(--text-main); }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+        .nav-item.active i { color: var(--primary); }
+
+        /* User Profile Dropdown */
+        .user-profile { margin-top: auto; padding: 20px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; cursor: pointer; position: relative; transition: background 0.2s; }
+        .user-profile:hover { background: var(--bg-body); }
+        .user-profile .avatar { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+        .user-profile .user-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .user-profile .user-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .user-profile .user-role { font-size: 13px; color: var(--text-muted); }
+        .user-profile i.ph-caret-down { color: var(--text-muted); }
+        
+        .profile-dropdown { position: absolute; bottom: calc(100% + 8px); left: 24px; right: 24px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.2s; z-index: 50; }
+        .profile-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+        .dropdown-item:hover { background: var(--bg-body); }
+        .dropdown-item i { font-size: 18px; color: var(--text-muted); }
+        .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+        .text-danger { color: #dc2626; }
+        .text-danger i { color: #dc2626; }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width); flex: 1; padding: 32px 48px; max-width: 1200px;
+        }
+        .page-title { font-size: 24px; font-weight: 700; color: var(--text-main); margin-bottom: 24px; }
+
+        /* Stats Card */
+        .stats-card {
+            background: var(--bg-surface); padding: 32px; border-radius: var(--border-radius); box-shadow: var(--shadow-card);
+            border: 1px solid var(--border); display: flex; gap: 64px; margin-bottom: 24px; align-items: center;
+        }
+        .stats-left { display: flex; flex-direction: column; align-items: center; min-width: 160px; }
+        .stats-left h2 { font-size: 48px; font-weight: 700; line-height: 1; margin-bottom: 8px; color: var(--text-main); }
+        .stars { display: flex; gap: 4px; color: var(--star-filled); font-size: 20px; margin-bottom: 8px; }
+        .stars .empty { color: var(--star-empty); }
+        .stats-left p { font-size: 13px; color: var(--text-muted); }
+
+        .stats-right { flex: 1; display: flex; flex-direction: column; gap: 8px; max-width: 500px; }
+        .bar-row { display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 500; color: var(--text-muted); }
+        .bar-label { min-width: 45px; }
+        .bar-track { flex: 1; height: 8px; background-color: var(--border); border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 4px; background-color: var(--star-filled); }
+        .bar-pct { min-width: 35px; text-align: right; }
+
+        /* Filters */
+        .filters { display: flex; gap: 12px; margin-bottom: 24px; }
+        .filter-tab {
+            padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg-surface);
+            color: var(--text-muted); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+        }
+        .filter-tab:hover { background: var(--bg-body); color: var(--text-main); }
+        .filter-tab.active { background: #eff6ff; color: var(--primary); border-color: #bfdbfe; font-weight: 600; }
+
+        /* Review List */
+        .review-list {
+            background: var(--bg-surface); padding: 0 32px; border-radius: var(--border-radius);
+            box-shadow: var(--shadow-card); border: 1px solid var(--border); display: flex; flex-direction: column;
+        }
+        .review-card {
+            display: flex; gap: 24px; padding: 32px 0; border-bottom: 1px solid var(--border);
+        }
+        .review-card:last-child { border-bottom: none; }
+        .product-img { width: 80px; height: 80px; border-radius: 8px; background: #f9ecee; border: 1px solid var(--border); object-fit: cover; }
+        .review-content { flex: 1; display: flex; flex-direction: column; }
+        .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .review-product-name { font-size: 16px; font-weight: 600; color: var(--text-main); }
+        .review-time { font-size: 13px; color: var(--text-muted); }
+        .review-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .meta-stars { display: flex; color: var(--star-filled); font-size: 14px; gap: 2px; }
+        .meta-stars .empty { color: var(--star-empty); }
+        .meta-user { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .review-text { font-size: 15px; line-height: 1.5; color: var(--text-muted); margin-bottom: 16px; }
+
+        /* Gallery */
+        .review-images-gallery { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .review-image { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid var(--border); }
+        
+        /* Action Buttons */
+        .btn-resolve {
+            align-self: flex-start; background: var(--primary); color: white; border: none; padding: 10px 20px;
+            border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-resolve:hover { background: var(--primary-hover); }
+
+        /* Seller Response */
+        .seller-response {
+            background: var(--bg-body); padding: 16px; border-radius: 8px; border: 1px solid var(--border); margin-top: 8px;
+        }
+        .response-title {
+            display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 6px;
+        }
+        .response-title i { color: var(--primary); font-size: 16px; }
+        .response-text { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+        /* Load More & State */
+        .load-more-btn {
+            width: 100%; padding: 16px; background: var(--bg-surface); border: 1px solid var(--border);
+            border-radius: var(--border-radius); font-size: 14px; font-weight: 600; color: var(--text-main);
+            cursor: pointer; margin-top: 24px; transition: background 0.2s; box-shadow: var(--shadow-card);
+            display: none;
+        }
+        .load-more-btn:hover { background: var(--bg-body); }
+        
+        .empty-state { text-align: center; padding: 48px 0; color: var(--text-muted); display: none; }
+        .loader { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; display: none; margin-left:8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Lightbox Overlay */
+        .lightbox-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85);
+            z-index: 10000; display: none; align-items: center; justify-content: center;
+        }
+        .lightbox-overlay.active { display: flex; }
+        .lightbox-image { max-width: 90%; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 32px; background: none; border: none; cursor: pointer; }
+
+    </style>
+</head>
+<body>
+
+
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <a href="index.html" class="logo-section">
+            <div class="logo-icon"><i class="ph-fill ph-basketball"></i></div>
+            <div class="logo-text">SportMarket</div>
+        </a>
+
+        <!-- Menu -->
+        <nav class="nav-menu">
+            <a href="#" class="nav-item"><i class="ph ph-squares-four"></i> Dashboard</a>
+            <a href="#" class="nav-item"><i class="ph ph-chart-line-up"></i> Sales</a>
+            <a href="#" class="nav-item"><i class="ph ph-package"></i> Products</a>
+            <a href="#" class="nav-item"><i class="ph ph-chat-circle-dots"></i> Messaging</a>
+            <a href="#" class="nav-item"><i class="ph ph-calendar-check"></i> Scheduling</a>
+            <a href="seller-reviews.html" class="nav-item active"><i class="ph ph-star"></i> My Reviews</a>
+            <a href="#" class="nav-item"><i class="ph ph-gear"></i> Settings</a>
+        </nav>
+
+        <!-- Account -->
+        <div class="user-profile" id="userProfileBtn">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=80" alt="GymGear VN" class="avatar">
+            <div class="user-info">
+                <span class="user-name">GymGear VN</span>
+                <span class="user-role">Seller</span>
+            </div>
+            <i class="ph ph-caret-down"></i>
+            
+            <!-- Dropdown Menu -->
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="#" class="dropdown-item"><i class="ph ph-storefront"></i> Shop Profile</a>
+                <a href="#" class="dropdown-item"><i class="ph ph-gear"></i> Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="index.html" class="dropdown-item text-danger"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+        <h1 class="page-title">Reviews Management</h1>
+
+        <!-- Stats Card -->
+        <div class="stats-card">
+            <div class="stats-left">
+                <h2>4.8</h2>
+                <div class="stars">
+                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                </div>
+                <p>Based on <span id="totalStatsCount">1,245</span> reviews</p>
+            </div>
+            
+            <div class="stats-right">
+                <div class="bar-row"><span class="bar-label">5 Star</span><div class="bar-track"><div class="bar-fill" style="width: 80%;"></div></div><span class="bar-pct">80%</span></div>
+                <div class="bar-row"><span class="bar-label">4 Star</span><div class="bar-track"><div class="bar-fill" style="width: 12%;"></div></div><span class="bar-pct">12%</span></div>
+                <div class="bar-row"><span class="bar-label">3 Star</span><div class="bar-track"><div class="bar-fill" style="width: 5%;"></div></div><span class="bar-pct">5%</span></div>
+                <div class="bar-row"><span class="bar-label">2 Star</span><div class="bar-track"><div class="bar-fill" style="width: 2%;"></div></div><span class="bar-pct">2%</span></div>
+                <div class="bar-row"><span class="bar-label">1 Star</span><div class="bar-track"><div class="bar-fill" style="width: 1%;"></div></div><span class="bar-pct">1%</span></div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters" id="filterTabs">
+            <button class="filter-tab active" data-filter="all">All Reviews</button>
+            <button class="filter-tab" data-filter="needs_reply">Needs Reply (<span id="needsReplyCount">1</span>)</button>
+            <button class="filter-tab" data-filter="five_stars">5 Stars</button>
+            <button class="filter-tab" data-filter="four_stars">4 Stars</button>
+            <button class="filter-tab" data-filter="low_stars">1-3 Stars</button>
+            <button class="filter-tab" data-filter="reported">Reported</button>
+        </div>
+
+        <!-- Sort Row -->
+        <div style="display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:16px;">
+            <span style="font-size:13px;color:#6b7280;font-weight:500;">Sắp xếp theo:</span>
+            <select id="sortSelect" style="padding:8px 16px;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;font-weight:500;color:#111827;background:white;cursor:pointer;outline:none;">
+                <option value="newest">Mới nhất</option>
+                <option value="oldest">Cũ nhất</option>
+                <option value="highest">Sao cao nhất</option>
+                <option value="lowest">Sao thấp nhất</option>
+                <option value="unreplied">Chưa trả lời trước</option>
+            </select>
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display:none;flex-direction:column;align-items:center;padding:64px 32px;text-align:center;background:white;border:1px solid #e5e7eb;border-radius:16px;gap:12px;">
+            <div style="width:72px;height:72px;background:#f3f4f6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#9ca3af;"><i class="ph ph-chat-circle"></i></div>
+            <h3 style="font-size:18px;font-weight:700;color:#111827;margin:0;">Không có đánh giá nào</h3>
+            <p style="font-size:14px;color:#6b7280;margin:0;">Không có đánh giá phù hợp với bộ lọc này.<br>Hãy thử chọn bộ lọc khác.</p>
+        </div>
+
+        <!-- Review List Container -->
+        <div class="review-list" id="reviewList">
+            <!-- JS will populate -->
+        </div>
+
+        <button class="load-more-btn" id="loadMoreBtn">
+            <span id="loadMoreText">Load More Reviews</span>
+            <span class="loader" id="loadMoreLoader"></span>
+        </button>
+
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose"><i class="ph ph-x"></i></button>
+        <img src="" alt="Full view" class="lightbox-image" id="lightboxImg">
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        // MOCK DATA for SELLER
+        const sellerMockData = [];
+        const baseProducts = [
+            { img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80", name: "Giày Chạy Bộ Nike Air Max 90" },
+            { img: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=200&q=80", name: "Thảm Yoga Cao Cấp TPE 6mm" },
+            { img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80", name: "Giày Thể Thao Sneaker Năng Động" },
+            { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&q=80", name: "Dây Kháng Lực Đa Năng" },
+            { img: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=200&q=80", name: "Tạ Đơn Tập Gym Tại Nhà" },
+            { img: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=200&q=80", name: "Đồ Thể Thao Tập Gym Nam" },
+            { img: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=200&q=80", name: "Thùng Lắc Sữa Protein SmartShaker" }
+        ];
+
+        const generateNames = ["Trần Mình Hà", "Lê Thu Hà", "Phạm Văn Minh", "Nguyễn Quốc Toản", "Đặng Thị Nga", "Hoàng Bách", "Trịnh Hưng", "Vũ Huy Dũng", "Hoàng Kim Yến", "Ngô Đức Tài"];
+        const reviewImages = [
+            "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=400&q=80",
+            "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&q=80",
+            "https://images.unsplash.com/photo-1552346154-21d32810baa3?w=400&q=80",
+            "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400&q=80",
+            "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&q=80"
+        ];
+        
+        const reviewTexts = [
+            "Sản phẩm quá đẹp so với giá tiền. Đi rất ôm chân và nhẹ.",
+            "Chất lượng bình thường, giao hàng chậm. Hộp bị móp nhiều.",
+            "Tuyệt vời! Đóng gói cực kỳ cẩn thận, sản phẩm đúng như hình chụp. Ủng hộ shop dài dài.",
+            "Sử dụng một thời gian thấy hiệu quả tốt. Nhưng màu sắc ở ngoài hơi tối hơn trong ảnh.",
+            "Rất thất vọng, chất liệu không giống mô tả. Shop cần chú ý hơn về khâu kiểm tra hàng.",
+            "Mới nhận hàng xong, cảm giác cầm rất chắc chắn. Sẽ mua thêm để làm quà tặng."
+        ];
+
+        // Replace the loop
+        for(let i = 0; i < 20; i++) {
+            let pIdx = i % baseProducts.length;
+            
+            // Varied stars
+            let stars = (i % 5 === 0) ? 2 : (i % 7 === 0 ? 3 : (i % 4 === 0 ? 4 : 5));
+            
+            // More unreplied (1/3 unreplied)
+            let isReplied = (i % 3 !== 0); 
+            let response = isReplied ? { text: "Cảm ơn bạn đã quan tâm và để lại đánh giá! Chúc bạn có một ngày thật vui vẻ nhé." } : null;
+            
+            // Varied images
+            let images = [];
+            if (i % 2 === 0) {
+                images.push(reviewImages[i % reviewImages.length]);
+            }
+            if (i % 4 === 0) {
+                images.push(reviewImages[(i + 1) % reviewImages.length]);
+            }
+            
+            sellerMockData.push({
+                id: 'sys_' + i,
+                prodImg: baseProducts[pIdx].img,
+                prodName: baseProducts[pIdx].name,
+                buyerName: generateNames[i % generateNames.length],
+                stars: stars,
+                timeStr: (i*2 + 2) + " hours ago",
+                timestamp: Date.now() - (i*2*3600000) - 7200000,
+                text: reviewTexts[i % reviewTexts.length],
+                images: images,
+                response: response
+            });
+        }
+
+        // Fetch User Submitted mock reviews from LocalStorage
+        try {
+            let savedReviews = JSON.parse(localStorage.getItem('sportmarket_reviews')) || [];
+            
+            // Deduplicate by text to prevent test spam
+            const uniqueTexts = new Set();
+            savedReviews = savedReviews.filter(r => {
+                if(uniqueTexts.has(r.text)) return false;
+                uniqueTexts.add(r.text);
+                return true;
+            });
+            // Clean up the user's local storage automatically
+            localStorage.setItem('sportmarket_reviews', JSON.stringify(savedReviews));
+
+            savedReviews.forEach((r, idx) => {
+                // Fix broken blob URLs
+                let safeImages = (r.images || []).map(imgUrl => {
+                    return imgUrl.startsWith('blob:') ? reviewImages[Math.floor(Math.random() * reviewImages.length)] : imgUrl;
+                });
+
+                sellerMockData.unshift({
+                    id: r.id,
+                    prodImg: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=80",
+                    prodName: "Nike Air Max 90 Running Shoes",
+                    buyerName: r.name || "Khách Hàng",
+                    stars: r.stars || 5,
+                    timeStr: r.timeStr || "Just now",
+                    timestamp: r.timestamp || Date.now(),
+                    text: r.text || "",
+                    images: safeImages,
+                    response: null // Needs seller reply!
+                });
+            });
+        } catch(e) {}
+
+        // State
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        let filteredData = [];
+
+        // Elements
+        const reviewListEl = document.getElementById('reviewList');
+        const emptyState = document.getElementById('emptyState');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const loadMoreLoader = document.getElementById('loadMoreLoader');
+        const loadMoreText = document.getElementById('loadMoreText');
+        const countUi = document.getElementById('needsReplyCount');
+
+        function updateCounts() {
+            // Sync total in stats card with actual data length
+            document.getElementById('totalStatsCount').textContent = sellerMockData.length.toLocaleString();
+
+            const reported = JSON.parse(localStorage.getItem('sportmarket_reported_reviews')) || [];
+            const needsReplyList = sellerMockData.filter(r => r.response === null && !reported.includes(r.id));
+            countUi.textContent = needsReplyList.length;
+
+            // Sync filter tab counts
+            const allTab = document.querySelector('[data-filter="all"]');
+            if (allTab) allTab.textContent = `All Reviews (${sellerMockData.length})`;
+            const fiveTab = document.querySelector('[data-filter="five_stars"]');
+            if (fiveTab) fiveTab.textContent = `5 Stars (${sellerMockData.filter(r=>r.stars===5).length})`;
+            const fourTab = document.querySelector('[data-filter="four_stars"]');
+            if (fourTab) fourTab.textContent = `4 Stars (${sellerMockData.filter(r=>r.stars===4).length})`;
+            const lowTab = document.querySelector('[data-filter="low_stars"]');
+            if (lowTab) lowTab.textContent = `1-3 Stars (${sellerMockData.filter(r=>r.stars<=3).length})`;
+        }
+
+        let currentSort = 'newest';
+
+        function applySort(data) {
+            const d = [...data];
+            if(currentSort === 'newest') d.sort((a,b) => b.timestamp - a.timestamp);
+            else if(currentSort === 'oldest') d.sort((a,b) => a.timestamp - b.timestamp);
+            else if(currentSort === 'highest') d.sort((a,b) => b.stars - a.stars);
+            else if(currentSort === 'lowest') d.sort((a,b) => a.stars - b.stars);
+            else if(currentSort === 'unreplied') d.sort((a,b) => (a.response ? 1 : 0) - (b.response ? 1 : 0));
+            return d;
+        }
+
+        function getFilteredData() {
+            const reported = JSON.parse(localStorage.getItem('sportmarket_reported_reviews')) || [];
+            if(currentFilter === 'needs_reply') return sellerMockData.filter(r => r.response === null && !reported.includes(r.id));
+            if(currentFilter === 'five_stars') return sellerMockData.filter(r => r.stars === 5);
+            if(currentFilter === 'four_stars') return sellerMockData.filter(r => r.stars === 4);
+            if(currentFilter === 'low_stars') return sellerMockData.filter(r => r.stars <= 3);
+            if(currentFilter === 'reported') return sellerMockData.filter(r => reported.includes(r.id));
+            return sellerMockData;
+        }
+
+        function renderStars(rating) {
+            let html = '';
+            for(let i=1; i<=5; i++) {
+                html += (i <= rating) ? '<i class="ph-fill ph-star"></i>' : '<i class="ph-fill ph-star empty"></i>';
+            }
+            return html;
+        }
+
+        function renderReviews(append = false) {
+            if (!append) reviewListEl.innerHTML = '';
+
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const chunk = filteredData.slice(startIdx, endIdx);
+            
+            const reportedReviews = JSON.parse(localStorage.getItem('sportmarket_reported_reviews')) || [];
+
+            if (filteredData.length === 0) {
+                emptyState.style.display = 'flex';
+                reviewListEl.style.display = 'none';
+                loadMoreBtn.style.display = 'none';
+                return;
+            } else {
+                emptyState.style.display = 'none';
+                reviewListEl.style.display = 'flex';
+            }
+
+            chunk.forEach(review => {
+                const imgHTML = review.images && review.images.length > 0 ? 
+                    `<div class="review-images-gallery">
+                        ${review.images.map(img => `<img src="${img}" class="review-image" onclick="openLightbox('${img}')" />`).join('')}
+                    </div>` : '';
+
+                let isReported = reportedReviews.includes(review.id);
+
+                // Build the action row — Report always shown, just changes appearance if reported
+                const reportBtn = isReported
+                    ? `<button disabled style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid #fcd34d;border-radius:8px;background:#fefce8;color:#92400e;font-size:13px;font-weight:600;cursor:not-allowed;opacity:0.85;">
+                            <i class="ph-fill ph-warning-circle" style="font-size:15px;"></i> Reported
+                       </button>`
+                    : `<button onclick="reportReview('${review.id}', this)" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid #d1d5db;border-radius:8px;background:white;color:#374151;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
+                            <i class="ph ph-flag" style="font-size:15px;"></i> Report
+                       </button>`;
+
+                // Seller response or Reply button
+                let responseArea = '';
+                if (review.response) {
+                    responseArea = `
+                    <div class="seller-response">
+                        <div class="response-title"><i class="ph-fill ph-storefront"></i> Your reply <span style="font-size:12px;color:#9ca3af;font-weight:400;margin-left:6px;">${review.timeStr}</span></div>
+                        <p class="response-text">${review.response.text}</p>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <button onclick="goToReplyPage('${review.id}')" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid #d1d5db;border-radius:8px;background:white;color:#374151;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
+                            <i class="ph ph-pencil" style="font-size:15px;"></i> Edit Reply
+                        </button>
+                        ${reportBtn}
+                    </div>`;
+                } else {
+                    responseArea = `
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        <button class="btn-resolve" onclick="goToReplyPage('${review.id}')"><i class="ph ph-chat-dots"></i> Reply &amp; Resolve</button>
+                        ${reportBtn}
+                    </div>`;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <img src="${review.prodImg}" alt="Product" class="product-img">
+                    <div class="review-content">
+                        <div class="review-header">
+                            <span class="review-product-name">${review.prodName}</span>
+                            <span class="review-time">${review.timeStr}</span>
+                        </div>
+                        <div class="review-meta">
+                            <div class="meta-stars">${renderStars(review.stars)}</div>
+                            <span class="meta-user">${review.buyerName}</span>
+                        </div>
+                        <p class="review-text">${review.text}</p>
+                        ${imgHTML}
+                        ${responseArea}
+                    </div>
+                `;
+                reviewListEl.appendChild(card);
+            });
+
+            if (endIdx >= filteredData.length) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'block';
+            }
+        }
+
+        function init() {
+            updateCounts();
+            filteredData = applySort(getFilteredData());
+            renderReviews(false);
+        }
+
+        // Setup filter clicking
+        document.querySelectorAll('.filter-tab').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                currentPage = 1;
+                filteredData = applySort(getFilteredData());
+                renderReviews(false);
+            });
+        });
+
+        // Sort select
+        document.getElementById('sortSelect').addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            currentPage = 1;
+            filteredData = applySort(getFilteredData());
+            renderReviews(false);
+        });
+
+        // Setup Load More
+        loadMoreBtn.addEventListener('click', () => {
+            loadMoreLoader.style.display = 'inline-block';
+            loadMoreText.style.display = 'none';
+            loadMoreBtn.disabled = true;
+            setTimeout(() => {
+                currentPage++;
+                renderReviews(true);
+                loadMoreLoader.style.display = 'none';
+                loadMoreText.style.display = 'inline';
+                loadMoreBtn.disabled = false;
+            }, 600);
+        });
+
+        // Navigation to Reply Page with storage injection to make it feel dynamic
+        window.goToReplyPage = function(reviewId) {
+            const rev = sellerMockData.find(r => r.id === reviewId);
+            if(rev) {
+                localStorage.setItem('sportmarket_current_reply_context', JSON.stringify(rev));
+            }
+            window.location.href = 'seller-reply.html';
+        };
+
+        // Report a review
+        window.reportReview = function(reviewId, btn) {
+            const reported = JSON.parse(localStorage.getItem('sportmarket_reported_reviews')) || [];
+            if (!reported.includes(reviewId)) {
+                reported.push(reviewId);
+                localStorage.setItem('sportmarket_reported_reviews', JSON.stringify(reported));
+            }
+            // Update button in-place immediately — no reload needed
+            btn.disabled = true;
+            btn.style.cssText = 'display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid #fcd34d;border-radius:8px;background:#fefce8;color:#92400e;font-size:13px;font-weight:600;cursor:not-allowed;opacity:0.85;';
+            btn.innerHTML = '<i class="ph-fill ph-warning-circle" style="font-size:15px;"></i> Reported';
+            updateCounts();
+        };
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+        window.openLightbox = function(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+        };
+        lightboxClose.onclick = () => lightbox.classList.remove('active');
+        lightbox.onclick = (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); };
+
+        init();
+
+        // Dropdown Logic
+        const userProfileBtn = document.getElementById('userProfileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        if(userProfileBtn && profileDropdown) {
+            userProfileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', (e) => {
+                if(!userProfileBtn.contains(e.target)) profileDropdown.classList.remove('show');
+            });
+        }
+    </script>
+</body>
+</html>

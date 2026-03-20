@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Reviews - SportMarket</title>
+    <!-- Modern Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modern Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            /* Color Variables */
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --bg-body: #f9fafb;
+            --bg-surface: #ffffff;
+            --border: #e5e7eb;
+            --star-filled: #f59e0b;
+            --star-empty: #d1d5db;
+            --badge-bg: #dcfce7;
+            --badge-text: #166534;
+            --font-family: 'Inter', sans-serif;
+            --sidebar-width: 240px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* -----------------------
+           Sidebar Styles 
+           ----------------------- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        /* 1. Logo & Brand */
+        .logo-section {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .logo-section:hover {
+            opacity: 0.8;
+        }
+
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        /* 2-7. Nav Menu */
+        .nav-menu {
+            flex: 1;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        /* Active State */
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-item.active i {
+            color: var(--primary);
+        }
+
+        /* 8. Account Info */
+        .account-container {
+            position: relative;
+        }
+
+        .account-info {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .account-info:hover {
+            background-color: var(--bg-body);
+        }
+
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .account-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .account-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .account-role {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            bottom: calc(100% - 10px);
+            left: 16px;
+            width: calc(100% - 32px);
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 20;
+            transform-origin: bottom center;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .profile-dropdown.show {
+            display: flex;
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-body);
+        }
+
+        .dropdown-item i {
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        /* -----------------------
+           Main Content Styles 
+           ----------------------- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px 48px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* 9. Page Title */
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Reviews Container */
+        .reviews-container {
+            background-color: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Top Header Grid: Rating Summary + Filters */
+        .reviews-header {
+            margin-bottom: 24px;
+        }
+
+        /* 10. Rating Summary */
+        .rating-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .rating-score-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .rating-score {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+
+        /* Percent Filled Star Graphic */
+        .rating-stars-graphic {
+            position: relative;
+            display: inline-flex;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .rating-stars-empty {
+            color: var(--star-empty);
+            display: flex;
+            gap: 4px;
+        }
+
+        .rating-stars-filled {
+            color: var(--star-filled);
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            display: flex;
+            gap: 4px;
+        }
+
+        .rating-count {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* 11. Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background-color: var(--bg-surface);
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .filter-tab:hover:not(:disabled) {
+            border-color: #d1d5db;
+            background-color: var(--bg-body);
+        }
+
+        .filter-tab.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .filter-tab:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            color: var(--text-light);
+            background-color: var(--bg-body);
+            border-color: var(--border);
+        }
+
+        /* 12. Sort Row */
+        .sort-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sort-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .sort-select {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+            background: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* 13. Review Card */
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-card {
+            padding: 24px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .review-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            gap: 16px;
+        }
+
+        .reviewer-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .reviewer-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .reviewer-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .review-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-stars {
+            display: flex;
+            color: var(--star-filled);
+            font-size: 15px;
+            gap: 2px;
+        }
+
+        .review-stars .empty {
+            color: var(--star-empty);
+        }
+
+        .verified-badge {
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .review-time {
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        /* Review Text & Read More */
+        .review-text-container {
+            margin-bottom: 16px;
+        }
+
+        .review-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-main);
+            /* Truncation logic via CSS Line Clamp */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .review-text.expanded {
+            -webkit-line-clamp: unset;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 4px;
+            display: none;
+            /* Shown via JS if needed */
+        }
+
+        .read-more-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Review Images */
+        .review-images-gallery {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .review-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .review-image:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Shop Response Block */
+        .shop-response {
+            background-color: #f3f4f6;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+            border-left: 3px solid var(--border);
+        }
+
+        .response-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .response-body {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 13. Button: Load More */
+        .load-more-container {
+            margin-top: 24px;
+            display: none;
+            /* Handled by JS */
+        }
+
+        .load-more-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .load-more-btn:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 32px;
+            text-align: center;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-top: 8px;
+        }
+        .empty-state .empty-icon {
+            width: 80px; height: 80px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; color: var(--text-light);
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 18px; font-weight: 700;
+            color: var(--text-main); margin-bottom: 8px;
+        }
+        .empty-state p {
+            font-size: 14px; color: var(--text-muted); line-height: 1.6;
+        }
+
+        /* Lightbox */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .lightbox-close:hover {
+            opacity: 1;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 0;
+            color: var(--text-muted);
+            display: none;
+            /* Managed by JS */
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--border);
+        }
+
+        /* Responsive Design tweaks */
+        @media (max-width: 1024px) {
+            .reviews-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 24px;
+            }
+
+            .rating-summary {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding-right: 0;
+                padding-bottom: 24px;
+            }
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Sort Dropdown */
+        .sort-row { display: flex; justify-content: flex-end; margin-bottom: 20px; align-items: center; gap: 10px; }
+        .sort-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .sort-select {
+            padding: 8px 32px 8px 14px; border: 1px solid var(--border); border-radius: 8px;
+            font-size: 13px; font-weight: 500; color: var(--text-main); background: white;
+            cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 10px center;
+            outline: none; transition: border-color 0.2s;
+        }
+        .sort-select:hover { border-color: #d1d5db; }
+
+        /* Helpful Button */
+        .helpful-row { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+        .helpful-label { font-size: 13px; color: var(--text-muted); }
+        .btn-helpful {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px;
+            background: white; color: var(--text-muted); font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-helpful:hover { background: #f3f4f6; border-color: #d1d5db; color: var(--text-main); }
+        .btn-helpful.voted { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+        .btn-helpful i { font-size: 15px; }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <!-- 1. Logo & Brand -->
+        <a href="/" class="logo-section">
+            <div class="logo-icon">SM</div>
+            <div class="logo-text">SportMarket</div>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-item"><i class="ph ph-storefront"></i> Marketplace</a>
+            <a href="#" class="nav-item"><i class="ph ph-shopping-bag"></i> Orders</a>
+            <a href="#" class="nav-item"><i class="ph ph-chat-circle-dots"></i> Messaging</a>
+            <a href="#" class="nav-item"><i class="ph ph-calendar-check"></i> Scheduling</a>
+            <a href="review-html-page.html" class="nav-item active"><i class="ph ph-star"></i> My Reviews</a>
+            <a href="#" class="nav-item"><i class="ph ph-bell"></i> Notifications</a>
+        </nav>
+
+        <!-- 8. Account Info (User Profile Block) -->
+        <div class="account-container">
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="#" class="dropdown-item"><i class="ph ph-user"></i> My Profile</a>
+                <a href="#" class="dropdown-item"><i class="ph ph-gear"></i> Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="index.html" class="dropdown-item" style="color: #ef4444;"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+            <div class="account-info" id="accountTrigger">
+                <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                    alt="Minh Tuấn" class="account-avatar">
+                <div class="account-details">
+                    <span class="account-name">Minh Tuấn</span>
+                    <span class="account-role">Buyer</span>
+                </div>
+                <i class="ph ph-caret-up" style="margin-left: auto; color: var(--text-muted); font-size: 16px;"></i>
+            </div>
+        </div>
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <!-- 9. Page Title & Action Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h1 class="page-title" style="margin-bottom: 0;">Customer Reviews</h1>
+                <a href="write-review.html" class="btn-primary">
+                    <i class="ph ph-pencil-simple"></i> Write a Review
+                </a>
+            </div>
+
+            <div class="reviews-container">
+                <!-- Top Header -->
+                <div class="reviews-header">
+                    <!-- 10. Rating Summary -->
+                    <div class="rating-summary">
+                        <div class="rating-score-row">
+                            <div class="rating-score">4.8</div>
+                            <div>
+                                <!-- 80% Filled Graphic -->
+                                <div class="rating-stars-graphic">
+                                    <!-- Empty background stars -->
+                                    <div class="rating-stars-empty">
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                    </div>
+                                    <!-- Filled foreground stars (Width = 4.8 / 5.0 = 96%) -->
+                                    <div class="rating-stars-filled" style="width: 96%;">
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                        <i class="ph-fill ph-star"></i>
+                                    </div>
+                                </div>
+                                <div class="rating-count" id="totalRatingCount">128 Reviews</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter & Sort Row -->
+                <div class="sort-row">
+                    <!-- 11. Filter Tabs -->
+                    <div class="filter-tabs" id="filterTabs">
+                        <button class="filter-tab active" data-filter="all" id="tab-all">All (128)</button>
+                        <button class="filter-tab" data-filter="photos" id="tab-photos">With Photos (45)</button>
+                        <button class="filter-tab" data-filter="5stars" id="tab-5stars">5 Stars (98)</button>
+                        <button class="filter-tab" data-filter="4stars" id="tab-4stars">4 Stars (20)</button>
+                        <button class="filter-tab" data-filter="lowstars" id="tab-lowstars">1-3 Stars (0)</button>
+                    </div>
+
+                    <!-- Sort -->
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="sort-label">Sắp xếp theo:</span>
+                        <select class="sort-select" id="sortSelect">
+                            <option value="newest">Mới nhất</option>
+                            <option value="oldest">Cũ nhất</option>
+                            <option value="highest">Sao cao nhất</option>
+                            <option value="lowest">Sao thấp nhất</option>
+                            <option value="helpful">Hữu ích nhất</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon"><i class="ph ph-chat-circle"></i></div>
+                    <h3>Chưa có đánh giá nào</h3>
+                    <p>Không tìm thấy đánh giá phù hợp với bộ lọc hiện tại.<br>Hãy thử chọn bộ lọc khác hoặc xem tất cả đánh giá.</p>
+                </div>
+
+                <!-- 12. Reviews List -->
+                <div class="reviews-list" id="reviewsList">
+                    <!-- Javascript will populate this -->
+                </div>
+
+                <!-- 13. Button Load More -->
+                <div class="load-more-container" id="loadMoreContainer">
+                    <button class="load-more-btn" id="loadMoreBtn">
+                        <span id="loadMoreText">Load More Reviews</span>
+                        <span class="loader" id="loadMoreLoader"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Lightbox Overlay -->
+    <div class="lightbox-overlay" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose"><i class="ph ph-x"></i></button>
+            <img src="" alt="Full size" class="lightbox-image" id="lightboxImg">
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        // --- 1. MOCK DATA ---
+        // Simulating 128 items in real DB, we mock ~25 items to demonstrate Load More and filtering
+        const mockDatabase = [];
+        const baseReviews = [
+            {
+                id: 1,
+                name: "Lê Hoàng Nam",
+                avatar: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80",
+                delayDays: 2,
+                stars: 5,
+                verified: true,
+                text: "Chất lượng tuyệt vời! Shop đóng gói cẩn thận, tạ đúc đặc cầm rất chắc tay. Mới dùng được vài hôm nhưng thấy rất ưng ý. Sẽ tiếp tục ủng hộ shop khi cần mua thêm tạ nữa.",
+                images: [],
+                response: {
+                    shopName: "GymGear VN",
+                    text: "Cảm ơn bạn Nam đã tin tưởng ủng hộ shop! Chúc bạn có những buổi tập hiệu quả nhé."
+                }
+            },
+            {
+                id: 2,
+                name: "Nguyễn Thị Hà",
+                avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80",
+                delayDays: 5,
+                stars: 4,
+                verified: true,
+                text: "Sản phẩm tốt, đóng gói cẩn thận. Giá hợp lý. Sẽ ủng hộ shop tiếp. Bề mặt dây đàn hồi tốt, tuy nhiên mùi cao su lúc mới bóc ra hơi nồng, để qua một đêm mới hết mùi. Nhìn chung rất đáng tiền! Mình đã thử kéo nhiều lần không đứt.",
+                images: [
+                    "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                ],
+                response: null
+            },
+            {
+                id: 3,
+                name: "Đỗ Quang Huy",
+                avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80",
+                delayDays: 21,
+                stars: 4,
+                verified: true,
+                text: "Giày chạy bộ rất tốt, êm ái. Tuy nhiên size hơi nhỏ so với mô tả. Nên đặt lớn hơn 1 size. Chạy đường dài cảm giác bàn chân khá thoải mái không bị đau mỏi, đế giày bám đường tốt trên các bề mặt ẩm ướt.",
+                images: [
+                    "https://images.unsplash.com/photo-1491553895911-0055eca6402d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1552346154-21d32810baa3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                ],
+                response: null
+            },
+            {
+                id: 4,
+                name: "Trần Mai",
+                avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80",
+                delayDays: 30,
+                stars: 5,
+                verified: true,
+                text: "Thảm yoga rất đẹp, dày dặn và chống trượt tốt. Mình rất ưng cái màu xanh này. Cảm ơn shop nheeeee <3",
+                images: ["https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                response: {
+                    shopName: "YogaLife",
+                    text: "Shop rất vui vì bạn thích sản phẩm! Chúc bạn có những phút giây tập yoga thư giãn."
+                }
+            },
+            {
+                id: 5,
+                name: "Phạm Tâm",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80",
+                delayDays: 45,
+                stars: 5,
+                verified: false,
+                text: "Giao hàng cực nhanh, đồ đúng mô tả. Đã mua lần 2.",
+                images: [],
+                response: null
+            }
+        ];
+
+        // Generate more data dynamically
+        const extraNames = ["Trần Thu Thủy", "Lê Văn Cường", "Phạm Ngọc Ánh", "Đặng Quang Hưng", "Vũ Huy Dũng", "Hoàng Kim Yến", "Ngô Đức Tài", "Bùi Thanh Tùng", "Đỗ Trà My", "Phan Tuấn Kiệt"];
+
+        for (let i = 0; i < 20; i++) {
+            const template = baseReviews[i % baseReviews.length];
+            // Compute real relative time strings based on delayDays + offset
+            let daysAgo = template.delayDays + i * 2;
+            let timeStr = daysAgo > 30 ? Math.floor(daysAgo / 30) + ' months ago' :
+                daysAgo > 7 ? Math.floor(daysAgo / 7) + ' weeks ago' :
+                    daysAgo + ' days ago';
+
+            mockDatabase.push({
+                ...template,
+                id: 10 + i,
+                name: extraNames[i % extraNames.length],
+                avatar: `https://i.pravatar.cc/150?u=user${i + 50}`,
+                timeStr: timeStr,
+                timestamp: Date.now() - (daysAgo * 86400000)
+            });
+        }
+
+        // Load self-submitted reviews from LocalStorage
+        try {
+            const savedReviews = JSON.parse(localStorage.getItem('sportmarket_reviews')) || [];
+            // Only show the most recent 1 user-submitted review to avoid duplicate stacking
+            if(savedReviews.length > 0) {
+                mockDatabase.unshift(savedReviews[0]);
+            }
+        } catch (e) { }
+
+        // Sort newest first by default
+        mockDatabase.sort((a, b) => b.timestamp - a.timestamp);
+
+        // assign random helpfulCount seed so it's stable
+        mockDatabase.forEach((r, i) => { if(!r.helpfulCount) r.helpfulCount = (i * 7 + 3) % 28; });
+
+        // --- SYNC COUNTS ---
+        function syncCounts() {
+            const total       = mockDatabase.length;
+            const withPhotos  = mockDatabase.filter(r => r.images && r.images.length > 0).length;
+            const five        = mockDatabase.filter(r => r.stars === 5).length;
+            const four        = mockDatabase.filter(r => r.stars === 4).length;
+            const low         = mockDatabase.filter(r => r.stars <= 3).length;
+
+            document.getElementById('totalRatingCount').textContent = total + ' Reviews';
+            document.getElementById('tab-all').textContent      = `All (${total})`;
+            document.getElementById('tab-photos').textContent   = `With Photos (${withPhotos})`;
+            document.getElementById('tab-5stars').textContent   = `5 Stars (${five})`;
+            document.getElementById('tab-4stars').textContent   = `4 Stars (${four})`;
+            document.getElementById('tab-lowstars').textContent = `1-3 Stars (${low})`;
+        }
+        syncCounts();
+
+        // --- 2. STATE ---
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        let filteredData = [];
+
+        // --- 3. DOM ELEMENTS ---
+        const reviewsListEl = document.getElementById('reviewsList');
+        const loadMoreContainer = document.getElementById('loadMoreContainer');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const loadMoreText = document.getElementById('loadMoreText');
+        const loadMoreLoader = document.getElementById('loadMoreLoader');
+        const emptyState = document.getElementById('emptyState');
+        const filterBtns = document.querySelectorAll('.filter-tab');
+
+        // Lightbox elements
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        // --- 4. RENDER LOGIC ---
+        function getFilteredData() {
+            switch (currentFilter) {
+                case 'photos': return mockDatabase.filter(r => r.images.length > 0);
+                case '5stars': return mockDatabase.filter(r => r.stars === 5);
+                case '4stars': return mockDatabase.filter(r => r.stars === 4);
+                case 'lowstars': return mockDatabase.filter(r => r.stars <= 3);
+                case 'all':
+                default: return mockDatabase;
+            }
+        }
+
+        function createStarsHTML(rating) {
+            let html = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    html += '<i class="ph-fill ph-star"></i>';
+                } else {
+                    html += '<i class="ph-fill ph-star empty"></i>';
+                }
+            }
+            return html;
+        }
+
+        function renderReviews(append = false) {
+            if (!append) {
+                reviewsListEl.innerHTML = '';
+            }
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const itemsToRender = filteredData.slice(startIndex, endIndex);
+
+            if (filteredData.length === 0) {
+                emptyState.style.display = 'flex';
+                loadMoreContainer.style.display = 'none';
+                return;
+            } else {
+                emptyState.style.display = 'none';
+            }
+
+            itemsToRender.forEach(review => {
+                const verifiedTag = review.verified
+                    ? `<div class="verified-badge"><i class="ph-fill ph-check-circle"></i> Verified Purchase</div>`
+                    : '';
+
+                const imagesHTML = review.images.length > 0
+                    ? `<div class="review-images-gallery">
+                        ${review.images.map(img => `<img src="${img}" alt="Review photo" class="review-image" onclick="openLightbox('${img}')">`).join('')}
+                       </div>`
+                    : '';
+
+                const responseHTML = review.response
+                    ? `<div class="shop-response">
+                        <div class="response-title">Response from ${review.response.shopName}</div>
+                        <div class="response-body">${review.response.text}</div>
+                       </div>`
+                    : '';
+
+                const article = document.createElement('article');
+                article.className = 'review-card';
+                const helpfulCount = review.helpfulCount || Math.floor(Math.random() * 30);
+                review.helpfulCount = helpfulCount;
+                const voteKey = 'voted_' + review.id;
+                const alreadyVoted = localStorage.getItem(voteKey);
+                article.innerHTML = `
+                    <div class="review-card-header">
+                        <div class="reviewer-info">
+                            <img src="${review.avatar}" alt="${review.name}" class="reviewer-avatar">
+                            <div class="reviewer-details">
+                                <div class="reviewer-name">${review.name}</div>
+                                <div class="review-meta">
+                                    <div class="review-stars">
+                                        ${createStarsHTML(review.stars)}
+                                    </div>
+                                    ${verifiedTag}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-time">${review.timeStr}</div>
+                    </div>
+                    <div class="review-text-container">
+                        <div class="review-text">${review.text}</div>
+                        <button class="read-more-btn">Read more</button>
+                    </div>
+                    ${imagesHTML}
+                    ${responseHTML}
+                    <div class="helpful-row">
+                        <span class="helpful-label">Đánh giá này có hữu ích không?</span>
+                        <button class="btn-helpful ${alreadyVoted ? 'voted' : ''}" data-id="${review.id}" data-count="${helpfulCount}">
+                            <i class="ph${alreadyVoted ? '-fill' : ''} ph-thumbs-up"></i>
+                            <span>${alreadyVoted ? helpfulCount + 1 : helpfulCount} người thấy hữu ích</span>
+                        </button>
+                    </div>
+                `;
+                // wire helpful vote
+                const helpBtn = article.querySelector('.btn-helpful');
+                helpBtn.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const vk = 'voted_' + id;
+                    if(localStorage.getItem(vk)) return;
+                    localStorage.setItem(vk, '1');
+                    const cnt = parseInt(this.dataset.count) + 1;
+                    this.dataset.count = cnt;
+                    this.classList.add('voted');
+                    this.innerHTML = `<i class="ph-fill ph-thumbs-up"></i><span>${cnt} người thấy hữu ích</span>`;
+                });
+                reviewsListEl.appendChild(article);
+            });
+
+            // Handle Read More visibility
+            const textContainers = document.querySelectorAll('.review-text-container');
+            textContainers.forEach(container => {
+                const textEl = container.querySelector('.review-text');
+                const btnEl = container.querySelector('.read-more-btn');
+
+                // Allow CSS to calculate line height
+                setTimeout(() => {
+                    // If text is actually truncated (scrollHeight > clientHeight)
+                    if (textEl.scrollHeight > textEl.clientHeight) {
+                        btnEl.style.display = 'block';
+
+                        // Prevent multiple listener bindings on Load More appends
+                        if (!btnEl.dataset.bound) {
+                            btnEl.addEventListener('click', () => {
+                                textEl.classList.toggle('expanded');
+                                btnEl.innerText = textEl.classList.contains('expanded') ? 'Show less' : 'Read more';
+                            });
+                            btnEl.dataset.bound = "true";
+                        }
+                    }
+                }, 50);
+            });
+
+            // Update Load More visibility
+            if (endIndex >= filteredData.length) {
+                loadMoreContainer.style.display = 'none';
+            } else {
+                loadMoreContainer.style.display = 'block';
+            }
+        }
+
+        // --- 5. INITIALIZATION ---
+        function init() {
+            filteredData = applySort(getFilteredData());
+            renderReviews(false);
+        }
+
+        // --- 6. EVENT LISTENERS ---
+
+        // Filters
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (btn.hasAttribute('disabled')) return;
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                currentPage = 1;
+                filteredData = applySort(getFilteredData());
+                renderReviews(false);
+            });
+        });
+
+        // Sort
+        let currentSort = 'newest';
+        function applySort(data) {
+            const d = [...data];
+            if(currentSort === 'newest') d.sort((a,b) => b.timestamp - a.timestamp);
+            else if(currentSort === 'oldest') d.sort((a,b) => a.timestamp - b.timestamp);
+            else if(currentSort === 'highest') d.sort((a,b) => b.stars - a.stars);
+            else if(currentSort === 'lowest') d.sort((a,b) => a.stars - b.stars);
+            else if(currentSort === 'helpful') d.sort((a,b) => (b.helpfulCount||0) - (a.helpfulCount||0));
+            return d;
+        }
+
+        const sortSelect = document.getElementById('sortSelect');
+        sortSelect.addEventListener('change', () => {
+            currentSort = sortSelect.value;
+            currentPage = 1;
+            filteredData = applySort(getFilteredData());
+            renderReviews(false);
+        });
+
+        // Load More (Mock API Request)
+        loadMoreBtn.addEventListener('click', () => {
+            // Loading state
+            loadMoreText.style.display = 'none';
+            loadMoreLoader.style.display = 'inline-block';
+            loadMoreBtn.disabled = true;
+
+            // Fake network delay
+            setTimeout(() => {
+                currentPage++;
+                renderReviews(true);
+
+                // Restore button state
+                loadMoreText.style.display = 'inline';
+                loadMoreLoader.style.display = 'none';
+                loadMoreBtn.disabled = false;
+            }, 600);
+        });
+
+        // Lightbox
+        window.openLightbox = function (imgSrc) {
+            lightboxImg.src = imgSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        };
+        const closeLightbox = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Dropdown Toggle
+        const accountTrigger = document.getElementById('accountTrigger');
+        const accountDropdown = document.getElementById('profileDropdown'); // It is profileDropdown in HTML
+        const caretIcon = accountTrigger ? accountTrigger.querySelector('.ph-caret-up, .ph-caret-down') : null;
+
+        if (accountTrigger && accountDropdown) {
+            accountTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = accountDropdown.classList.contains('show');
+                if (isOpen) {
+                    accountDropdown.classList.remove('show');
+                    if (caretIcon) caretIcon.className = 'ph ph-caret-up';
+                } else {
+                    accountDropdown.classList.add('show');
+                    if (caretIcon) caretIcon.className = 'ph ph-caret-down';
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!accountTrigger.contains(e.target) && !accountDropdown.contains(e.target)) {
+                    accountDropdown.classList.remove('show');
+                    if (caretIcon) caretIcon.className = 'ph ph-caret-up';
+                }
+            });
+        }
+
+        // Run
+        init();
+
+    </script>
+</body>
+
+</html>

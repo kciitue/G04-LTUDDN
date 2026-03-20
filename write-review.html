@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Review - SportMarket</title>
+    <!-- Modern Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modern Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            /* Color Variables */
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --bg-body: #f3f4f6; /* slightly darker gray for main background */
+            --bg-surface: #ffffff;
+            --border: #e5e7eb;
+            --star-filled: #fbbf24;
+            --star-empty: #e5e7eb;
+            --font-family: 'Inter', sans-serif;
+            --sidebar-width: 240px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* -----------------------
+           Sidebar Styles 
+           ----------------------- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .logo-section {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+        .logo-section:hover {
+            opacity: 0.8;
+        }
+        .logo-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+        .nav-item i {
+            font-size: 20px;
+        }
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+        .nav-item.active i {
+            color: var(--primary);
+        }
+
+        .account-container {
+            position: relative;
+        }
+        .account-info {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .account-info:hover {
+            background-color: var(--bg-body);
+        }
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+        .account-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .account-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .account-role {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* -----------------------
+           Main Content Styles 
+           ----------------------- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--bg-surface);
+            border-radius: 12px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(0,0,0,0.05); /* very light border */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Card Header */
+        .form-header {
+            padding: 40px 48px 16px 48px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .back-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: var(--bg-body);
+            color: var(--text-main);
+        }
+        .header-title-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+        .header-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+        }
+
+        /* Form Body */
+        .form-body {
+            padding: 24px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        /* Product Box */
+        .product-box {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            align-items: center;
+        }
+        .product-img-container {
+            width: 72px;
+            height: 72px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fce7ec; /* matched to image roughly */
+        }
+        .product-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .product-status {
+            color: #16a34a;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .product-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+        .product-seller {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Rating Section */
+        .rating-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        .rating-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .interactive-stars {
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .interactive-stars i {
+            font-size: 48px;
+            color: var(--star-empty);
+            transition: transform 0.1s, color 0.2s;
+        }
+        .interactive-stars i:hover {
+            transform: scale(1.1);
+        }
+        .interactive-stars i.active {
+            color: var(--star-filled);
+        }
+
+        /* Form Groups */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+        .form-hint {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .form-textarea {
+            width: 100%;
+            resize: vertical;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #fafafa;
+        }
+        .form-textarea:focus {
+            border-color: var(--primary);
+            background-color: var(--bg-surface);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        .char-count {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 8px;
+            text-align: left;
+        }
+
+        /* Upload Area */
+        .media-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .upload-box {
+            width: 88px;
+            height: 88px;
+            border: 2px dashed #d1d5db; /* slightly thicker dashed border */
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: var(--bg-surface);
+        }
+        .upload-box:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+        .upload-box i {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+        .upload-box span {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .media-preview-container {
+            display: flex;
+            gap: 16px;
+        }
+        .media-preview {
+            width: 88px;
+            height: 88px;
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+        .media-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .media-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            background: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .media-remove:hover {
+            background: #111827;
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        .form-footer {
+            padding: 24px 48px 48px 48px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .btn-cancel {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+        .btn-cancel:hover {
+            background: var(--bg-body);
+        }
+        .btn-submit {
+            background: var(--primary);
+            border: 1px solid var(--primary);
+            color: white;
+        }
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+
+
+        /* Success Screen */
+        .success-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 48px;
+            text-align: center;
+            gap: 16px;
+        }
+        .success-icon {
+            width: 80px; height: 80px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #16a34a;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .success-title { font-size: 22px; font-weight: 700; color: var(--text-main); }
+        .success-sub { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+        .success-actions { display: flex; gap: 12px; margin-top: 8px; }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <!-- 1. Logo & Brand -->
+        <a href="/" class="logo-section">
+            <div class="logo-icon">SM</div>
+            <div class="logo-text">SportMarket</div>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="review-html-page.html" class="nav-item">
+                <i class="ph ph-storefront"></i>
+                Marketplace
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ph ph-package"></i>
+                Orders
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ph ph-chat-circle-dots"></i>
+                Messaging
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ph ph-calendar-check"></i>
+                Scheduling
+            </a>
+            <a href="review-html-page.html" class="nav-item active">
+                <i class="ph ph-star"></i>
+                My Reviews
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ph ph-bell"></i>
+                Notifications
+            </a>
+        </nav>
+
+        <div class="account-container">
+            <div class="account-info" id="accountTrigger">
+                <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Minh Tuấn" class="account-avatar">
+                <div class="account-details">
+                    <span class="account-name">Minh Tuấn</span>
+                    <span class="account-role">Buyer</span>
+                </div>
+                <i class="ph ph-caret-up" style="margin-left:auto;color:var(--text-muted);font-size:16px;"></i>
+            </div>
+            <div style="position:absolute;bottom:calc(100% + 4px);left:16px;right:16px;background:white;border:1px solid var(--border);border-radius:8px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);" id="writeReviewDropdown" hidden>
+                <a href="#" style="display:flex;align-items:center;gap:8px;padding:12px 16px;color:var(--text-main);text-decoration:none;font-size:14px;font-weight:500;"><i class="ph ph-user" style="font-size:18px;color:var(--text-muted);"></i> My Profile</a>
+                <a href="#" style="display:flex;align-items:center;gap:8px;padding:12px 16px;color:var(--text-main);text-decoration:none;font-size:14px;font-weight:500;"><i class="ph ph-gear" style="font-size:18px;color:var(--text-muted);"></i> Settings</a>
+                <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+                <a href="index.html" style="display:flex;align-items:center;gap:8px;padding:12px 16px;color:#dc2626;text-decoration:none;font-size:14px;font-weight:500;"><i class="ph ph-sign-out" style="font-size:18px;color:#dc2626;"></i> Logout</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="form-wrapper">
+            <!-- Header -->
+            <div class="form-header">
+                <button class="back-btn" onclick="window.history.back()" title="Go Back">
+                    <i class="ph ph-arrow-left"></i>
+                </button>
+                <div class="header-title-container">
+                    <h1 class="header-title">Write a Review</h1>
+                    <p class="header-subtitle">Share your thoughts with other customers</p>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="form-body">
+                <!-- Product Overview Box -->
+                <div class="product-box">
+                    <div class="product-img-container">
+                        <!-- Used a similar red shoe image -->
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Nike Air Max 90">
+                    </div>
+                    <div class="product-info">
+                        <span class="product-status">Delivered on March 5, 2026</span>
+                        <h2 class="product-name">Nike Air Max 90 Running Shoes</h2>
+                        <span class="product-seller">Sold by: SportZone VN</span>
+                    </div>
+                </div>
+
+                <!-- Star Rating Interactive -->
+                <div class="rating-section">
+                    <h3 class="rating-title">Overall Rating</h3>
+                    <div class="interactive-stars" id="starContainer">
+                        <i class="ph-fill ph-star active" data-index="1"></i>
+                        <i class="ph-fill ph-star active" data-index="2"></i>
+                        <i class="ph-fill ph-star active" data-index="3"></i>
+                        <i class="ph-fill ph-star active" data-index="4"></i>
+                        <i class="ph-fill ph-star active" data-index="5"></i>
+                    </div>
+                </div>
+
+
+
+                <!-- Written Review Textarea -->
+                <div class="form-group">
+                    <label class="form-label" for="reviewText">Add a written review</label>
+                    <p class="form-hint">What did you like or dislike? How did you use the product?</p>
+                    <textarea 
+                        id="reviewText" 
+                        class="form-textarea" 
+                        rows="5" 
+                        maxlength="500" 
+                        placeholder="Share your thoughts here..."
+                    >Giày rất tốt, rất thoải mái. Đi cả ngày không bị đau chân. Sản phẩm xuất sắc, đóng gói cẩn thận. Rất hài lòng!</textarea>
+                    <div class="char-count"><span id="charCount">0</span>/500 characters</div>
+                </div>
+
+                <!-- Media Upload -->
+                <div class="form-group">
+                    <h3 class="form-label">Add Photos or Videos</h3>
+                    <p class="form-hint">Shoppers find images and videos more helpful than text alone.</p>
+                    <div class="media-row">
+                        <div class="upload-box" id="uploadBtn">
+                            <i class="ph ph-plus"></i>
+                            <span>Upload</span>
+                        </div>
+                        <div class="media-preview-container" id="mediaPreviewContainer">
+                            <!-- Pre-filled mocked preview -->
+                            <div class="media-preview" id="mockPreview">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Uploaded photo">
+                                <button class="media-remove" aria-label="Remove image" onclick="document.getElementById('mockPreview').remove()">
+                                    <i class="ph ph-x"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="form-footer">
+                <button class="btn btn-cancel" onclick="window.history.back()">Cancel</button>
+                <button class="btn btn-submit" id="submitBtn" onclick="submitReview()">Submit Review</button>
+            </div>
+
+            <!-- Success Screen (hidden initially) -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon"><i class="ph-fill ph-check-circle"></i></div>
+                <div class="success-title">Cảm ơn đánh giá của bạn! 🎉</div>
+                <p class="success-sub">Review của bạn đã được gửi thành công và sẽ được hiển thị sau khi kiểm duyệt.<br>Cộng đồng SportMarket trân trọng ý kiến của bạn!</p>
+                <div class="success-actions">
+                    <a href="review-html-page.html" class="btn btn-submit" style="text-decoration:none;">Xem danh sách Review</a>
+                    <a href="index.html" class="btn btn-cancel" style="text-decoration:none;">Về trang chủ</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- 1. Star Rating Logic ---
+        const stars = document.querySelectorAll('#starContainer i');
+        let currentRating = 5; // Start with 5 stars selected (as in screenshot)
+
+        stars.forEach(star => {
+            // Hover effect
+            star.addEventListener('mouseover', function() {
+                const hoverValue = this.getAttribute('data-index');
+                highlightStars(hoverValue);
+            });
+
+            // Revert back to selected on mouseout
+            star.addEventListener('mouseleave', function() {
+                highlightStars(currentRating);
+            });
+
+            // Click to set rating
+            star.addEventListener('click', function() {
+                currentRating = this.getAttribute('data-index');
+                highlightStars(currentRating);
+                
+                // Add a small popup effect to give feedback
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+
+        function highlightStars(count) {
+            stars.forEach(star => {
+                if (parseInt(star.getAttribute('data-index')) <= count) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // --- 2. Character Count Logic ---
+        const reviewText = document.getElementById('reviewText');
+        const charCount = document.getElementById('charCount');
+
+        function updateCharCount() {
+            charCount.textContent = reviewText.value.length;
+        }
+        
+        // Initialize character count for pre-filled text
+        updateCharCount();
+
+        reviewText.addEventListener('input', updateCharCount);
+
+        // --- 3. Mock Upload Logic ---
+        const uploadBtn = document.getElementById('uploadBtn');
+        const mediaContainer = document.getElementById('mediaPreviewContainer');
+        const demoImages = [
+            "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+            "https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+        ];
+        let uploadIndex = 0;
+
+        uploadBtn.addEventListener('click', () => {
+            // Mocking a file upload process
+            if (uploadIndex >= demoImages.length) {
+                alert("Maximum demo images uploaded.");
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'media-preview';
+            
+            const img = document.createElement('img');
+            img.src = demoImages[uploadIndex];
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'media-remove';
+            removeBtn.innerHTML = '<i class="ph ph-x"></i>';
+            removeBtn.onclick = () => wrapper.remove();
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+            mediaContainer.appendChild(wrapper);
+
+            uploadIndex++;
+        });
+
+        // --- 4. Submit Logic ---
+        function submitReview() {
+            if (reviewText.value.trim().length === 0) {
+                alert("Please add a written review before submitting.");
+                return;
+            }
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerText = 'Submitting...';
+            submitBtn.disabled = true;
+
+            // Save to LocalStorage
+            try {
+                const newReview = {
+                    id: 'new-' + Date.now(),
+                    name: "Minh Tuấn",
+                    avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80",
+                    stars: parseInt(currentRating),
+                    verified: true,
+                    text: reviewText.value.trim(),
+                    images: Array.from(mediaContainer.querySelectorAll('img')).map(img => img.src),
+                    timestamp: Date.now(),
+                    timeStr: "Vừa xong",
+                    response: null
+                };
+                // Always replace (only keep this 1 newest review)
+                localStorage.setItem('sportmarket_reviews', JSON.stringify([newReview]));
+            } catch(e) { console.error(e); }
+
+            // Show success screen after short delay
+            setTimeout(() => {
+                document.querySelector('.form-body').style.display = 'none';
+                document.querySelector('.form-footer').style.display = 'none';
+                document.getElementById('successScreen').style.display = 'flex';
+            }, 600);
+        }
+
+        // --- 5. Criteria Stars Logic ---
+        document.querySelectorAll('.criteria-stars').forEach(group => {
+            const stars = group.querySelectorAll('i');
+            let current = Array.from(stars).filter(s => s.classList.contains('active')).length;
+            stars.forEach(star => {
+                star.addEventListener('mouseover', () => {
+                    const v = parseInt(star.dataset.v);
+                    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.v) <= v));
+                });
+                star.addEventListener('mouseleave', () => {
+                    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.v) <= current));
+                });
+                star.addEventListener('click', () => {
+                    current = parseInt(star.dataset.v);
+                    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.v) <= current));
+                    star.style.transform = 'scale(1.2)';
+                    setTimeout(() => star.style.transform = '', 150);
+                });
+            });
+        });
+
+        // --- 6. Account Dropdown Toggle ---
+        const accountTrigger = document.getElementById('accountTrigger');
+        const dropdown = document.getElementById('writeReviewDropdown');
+        const caretIcon = accountTrigger ? accountTrigger.querySelector('i') : null;
+
+        if (accountTrigger && dropdown) {
+            accountTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = dropdown.hasAttribute('hidden');
+                if (isHidden) {
+                    dropdown.removeAttribute('hidden');
+                    if (caretIcon) caretIcon.className = 'ph ph-caret-down';
+                } else {
+                    dropdown.setAttribute('hidden', '');
+                    if (caretIcon) caretIcon.className = 'ph ph-caret-up';
+                }
+            });
+            document.addEventListener('click', (e) => {
+                if (!accountTrigger.contains(e.target)) {
+                    dropdown.setAttribute('hidden', '');
+                    if (caretIcon) caretIcon.className = 'ph ph-caret-up';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

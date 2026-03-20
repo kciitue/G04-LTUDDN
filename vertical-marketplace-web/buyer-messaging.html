@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messaging - SportMarket</title>
+    <!-- Modern Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modern Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --bg-body: #ebf5ff; /* Slightly blue background matching screenshot */
+            --bg-surface: #ffffff;
+            --border: #e5e7eb;
+            --font-family: 'Inter', sans-serif;
+            --sidebar-width: 240px;
+            --shadow-card: 0 1px 3px rgba(0,0,0,0.05);
+            --border-radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* -----------------------
+           Sidebar Styles 
+           ----------------------- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            top: 0; left: 0; z-index: 10;
+        }
+        .logo-section { padding: 24px; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { color: var(--primary); font-size: 28px; }
+        .logo-text { font-size: 18px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+
+        .nav-menu { flex: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: all 0.2s ease; }
+        .nav-item:hover { background-color: var(--bg-body); color: var(--text-main); }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--primary); background-color: var(--primary-light); font-weight: 600; }
+        .nav-item.active i { color: var(--primary); }
+
+        .user-profile { margin-top: auto; padding: 20px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; cursor: pointer; position: relative; transition: background 0.2s; }
+        .user-profile:hover { background: var(--bg-body); }
+        .user-profile .avatar { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+        .user-profile .user-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .user-profile .user-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .user-profile .user-role { font-size: 13px; color: var(--text-muted); }
+        .user-profile i.ph-caret-down { color: var(--text-muted); }
+        
+        .profile-dropdown { position: absolute; bottom: calc(100% + 8px); left: 24px; right: 24px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.2s; z-index: 50; }
+        .profile-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+        .dropdown-item:hover { background: var(--bg-body); }
+        .dropdown-item i { font-size: 18px; color: var(--text-muted); }
+        .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+        .text-danger { color: #dc2626; }
+        .text-danger i { color: #dc2626; }
+
+        /* -----------------------
+           Main Content 
+           ----------------------- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1; 
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Message List Pane */
+        .message-pane {
+            width: 300px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .pane-header {
+            padding: 24px;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .pane-title { font-size: 22px; font-weight: 700; color: var(--text-main); }
+        .search-box {
+            position: relative;
+            display: flex; align-items: center;
+        }
+        .search-box i { position: absolute; left: 12px; color: var(--text-light); font-size: 18px; }
+        .search-box input {
+            width: 100%; padding: 10px 12px 10px 36px; border: 1px solid var(--border); border-radius: 8px;
+            font-size: 14px; outline: none; transition: border-color 0.2s; background: #f9fafb;
+        }
+        .search-box input:focus { border-color: var(--primary); background: white; }
+
+        .msg-list {
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+        }
+        .msg-item {
+            display: flex; gap: 12px; padding: 16px 24px; cursor: pointer; border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s;
+        }
+        .msg-item:hover { background: #f9fafb; }
+        .msg-item.active { background: #f0fdf4; border-left: 3px solid #10b981; } /* Just a slight tint for active */
+        .msg-item.active { background: var(--bg-body); border-left: 3px solid var(--primary); }
+        
+        .msg-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+        .msg-content { flex: 1; display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+        .msg-top { display: flex; justify-content: space-between; align-items: baseline; }
+        .msg-name { font-size: 15px; font-weight: 600; color: var(--text-main); }
+        .msg-time { font-size: 12px; color: var(--text-light); }
+        .msg-bottom { display: flex; justify-content: space-between; align-items: center; }
+        .msg-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .unread-badge { background: var(--primary); color: white; font-size: 11px; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        /* Chat Window */
+        .chat-pane {
+            flex: 1;
+            background: #fdfdfd;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            padding: 20px 32px; border-bottom: 1px solid var(--border); background: white;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .chat-user-info { display: flex; align-items: center; gap: 16px; }
+        .chat-user-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .chat-user-details { display: flex; flex-direction: column; gap: 4px; }
+        .chat-user-name { font-size: 18px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .role-tag { background: var(--primary-light); color: var(--primary); font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 600; }
+        .status-text { font-size: 13px; color: #10b981; display: flex; align-items: center; gap: 4px; font-weight: 500; }
+        .status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
+
+        .chat-actions { display: flex; gap: 12px; }
+        .chat-action-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: white; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+        .chat-action-btn:hover { background: var(--bg-body); color: var(--text-main); border-color: #d1d5db; }
+
+        /* Product Context */
+        .product-banner {
+            padding: 16px 32px; background: white; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .banner-left { display: flex; align-items: center; gap: 16px; }
+        .banner-img { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+        .banner-info { display: flex; flex-direction: column; gap: 4px; }
+        .banner-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .banner-price { font-size: 16px; font-weight: 700; color: var(--primary); }
+        .btn-scheduling { background: var(--primary); color: white; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; }
+        .btn-scheduling:hover { background: var(--primary-hover); }
+
+        /* Chat History */
+        .chat-history {
+            flex: 1; padding: 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 24px;
+        }
+        .msg-cluster { display: flex; flex-direction: column; gap: 4px; max-width: 60%; }
+        .msg-cluster.received { align-items: flex-start; }
+        .msg-cluster.sent { align-self: flex-end; align-items: flex-end; }
+        
+        .bubble { padding: 12px 16px; font-size: 15px; line-height: 1.5; position: relative; }
+        .received .bubble { background: #f3f4f6; color: var(--text-main); border-radius: 0 16px 16px 16px; }
+        .sent .bubble { background: var(--primary); color: white; border-radius: 16px 0 16px 16px; }
+        
+        .msg-timestamp { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+        /* Chat Input */
+        .chat-input-area {
+            padding: 24px 32px; background: white; border-top: 1px solid var(--border);
+            display: flex; align-items: center; gap: 16px;
+        }
+        .input-action { font-size: 24px; color: var(--text-light); cursor: pointer; transition: color 0.2s; }
+        .input-action:hover { color: var(--text-main); }
+        .chat-input-wrapper { flex: 1; position: relative; display: flex; align-items: center; }
+        .btn-send { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; border: none; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+        .btn-send:hover { background: var(--primary-hover); }
+
+        /* Appointment Chat Cards */
+        .appt-card {
+            background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            width: 280px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 12px;
+        }
+        .appt-card-header { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; color: var(--text-main); }
+        .appt-card-header i { font-size: 20px; }
+        .icon-blue { color: var(--primary); }
+        .icon-red { color: #dc2626; }
+        .icon-green { color: #16a34a; }
+        
+        .appt-card-body { font-size: 13px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; }
+        .appt-card-row { display: flex; justify-content: space-between; align-items: center; }
+        .appt-card-row span:last-child { color: var(--text-main); font-weight: 500; font-size: 14px; }
+        
+        .appt-card-actions { display: flex; gap: 8px; margin-top: 4px; }
+        .btn-appt { flex: 1; padding: 8px; border-radius: 6px; font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text-main); transition: all 0.2s; }
+        .btn-appt.primary { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-appt:hover { filter: brightness(0.95); }
+        
+        .appt-status { font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 6px; text-align: center; background: #f3f4f6; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .appt-status.cancelled { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        .appt-status.confirmed { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+        /* Confirmation Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.2s;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: white; border-radius: 12px; padding: 24px; width: 400px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            transform: translateY(20px); transition: transform 0.2s;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-header { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 12px; }
+        .modal-body { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+        .btn-modal { padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text-main); transition: all 0.2s; }
+        .btn-modal:hover { background: #f9fafb; }
+        .btn-modal.danger { background: #dc2626; color: white; border-color: #dc2626; }
+        .btn-modal.danger:hover { background: #b91c1c; }
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Floating Role Switcher -->
+    <a href="index.html" style="position: fixed; bottom: 24px; right: 24px; background: #111827; color: white; padding: 12px 24px; border-radius: 50px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 9999; font-size: 14px; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px;">
+        <i class="ph ph-house"></i> Go to Directory
+    </a>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <a href="index.html" class="logo-section">
+            <div class="logo-icon"><i class="ph-fill ph-basketball"></i></div>
+            <div class="logo-text">SportMarket</div>
+        </a>
+
+        <!-- Menu -->
+        <nav class="nav-menu">
+            <a href="#" class="nav-item"><i class="ph ph-storefront"></i> Marketplace</a>
+            <a href="#" class="nav-item"><i class="ph ph-shopping-bag"></i> Orders</a>
+            <a href="review-html-page.html" class="nav-item"><i class="ph ph-star"></i> My Reviews</a>
+            <a href="#" class="nav-item"><i class="ph ph-bell"></i> Notifications</a>
+            <a href="buyer-messaging.html" class="nav-item active"><i class="ph ph-chat-circle-dots"></i> Messaging</a>
+            <a href="buyer-scheduling.html" class="nav-item"><i class="ph ph-calendar-blank"></i> Scheduling</a>
+            <a href="#" class="nav-item"><i class="ph ph-gear"></i> Settings</a>
+        </nav>
+
+        <!-- Account -->
+        <div class="user-profile" id="userProfileBtn">
+            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Minh Tuấn" class="avatar">
+            <div class="user-info">
+                <span class="user-name">Minh Tuấn</span>
+                <span class="user-role">Buyer</span>
+            </div>
+            <i class="ph ph-caret-down"></i>
+            
+            <!-- Dropdown Menu -->
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="#" class="dropdown-item"><i class="ph ph-user"></i> My Profile</a>
+                <a href="#" class="dropdown-item"><i class="ph ph-gear"></i> Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="index.html" class="dropdown-item text-danger"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+        
+        <!-- Left Pane: Message List -->
+        <div class="message-pane">
+            <div class="pane-header">
+                <h1 class="pane-title">Messaging</h1>
+                <div class="search-box">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="search" placeholder="Search messages...">
+                </div>
+            </div>
+            
+            <div class="msg-list">
+                <!-- Active Item -->
+                <div class="msg-item active">
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=80" class="msg-avatar" alt="GymGear VN">
+                    <div class="msg-content">
+                        <div class="msg-top">
+                            <span class="msg-name">GymGear VN</span>
+                            <span class="msg-time" style="color: var(--primary); font-weight:600;">10:30</span>
+                        </div>
+                        <div class="msg-bottom">
+                            <span class="msg-preview" style="color: var(--text-main); font-weight: 500;">Dạ em có thể đến xem hàng vào...</span>
+                            <div class="unread-badge">1</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Read Item -->
+                <div class="msg-item">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&q=80" class="msg-avatar" alt="SportShoes Pro">
+                    <div class="msg-content">
+                        <div class="msg-top">
+                            <span class="msg-name">SportShoes Pro</span>
+                            <span class="msg-time">Yesterday</span>
+                        </div>
+                        <div class="msg-bottom">
+                            <span class="msg-preview">Cảm ơn anh đã mua hàng!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sent by me Item -->
+                <div class="msg-item">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=100&q=80" class="msg-avatar" alt="FitWear Store">
+                    <div class="msg-content">
+                        <div class="msg-top">
+                            <span class="msg-name">FitWear Store</span>
+                            <span class="msg-time">2 days ago</span>
+                        </div>
+                        <div class="msg-bottom">
+                            <span class="msg-preview">You: Cho em xem size M nhé</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Pane: Chat Window -->
+        <div class="chat-pane">
+            <!-- Header -->
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=80" class="chat-user-avatar" alt="GymGear VN">
+                    <div class="chat-user-details">
+                        <div class="chat-user-name">GymGear VN <span class="role-tag">Seller</span></div>
+                        <div class="status-text">
+                            <i class="ph-fill ph-star" style="color:#f59e0b;"></i> <span style="color:#f59e0b; margin-right:8px;">4.7</span>
+                            <div class="status-dot"></div> Online
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="chat-action-btn"><i class="ph ph-calendar-blank"></i></button>
+                    <button class="chat-action-btn"><i class="ph ph-phone"></i></button>
+                </div>
+            </div>
+
+            <!-- Product Context -->
+            <div class="product-banner">
+                <div class="banner-left">
+                    <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=200&q=80" alt="Bộ Tạ Tay 20kg" class="banner-img">
+                    <div class="banner-info">
+                        <span class="banner-name">Bộ Tạ Tay 20kg</span>
+                        <span class="banner-price">1.500.000đ</span>
+                    </div>
+                </div>
+                <a href="buyer-scheduling.html#new" class="btn-scheduling">Scheduling</a>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-history" id="chatHistory">
+                
+                <div class="msg-cluster sent">
+                    <div class="bubble">Chào shop, cho mình hỏi thêm thông tin về bộ tạ tay 20kg này với ạ.</div>
+                    <div class="msg-timestamp">09:30</div>
+                </div>
+
+                <div class="msg-cluster received">
+                    <div class="bubble">Chào anh! Cảm ơn anh đã liên hệ GymGear VN. Dạ bộ tạ này bao gồm đòn tạ thép và các bánh tạ bọc cao su chống ồn, có thể thay đổi mức tạ theo tổng trọng lượng 20kg ạ.</div>
+                    <div class="msg-timestamp">09:35</div>
+                </div>
+
+                <div class="msg-cluster sent">
+                    <div class="bubble">Mình mua về tập ở nhà thì có sợ bị trầy sàn nếu đặt mạnh xuống không shop?</div>
+                    <div class="msg-timestamp">09:38</div>
+                </div>
+
+                <div class="msg-cluster received">
+                    <div class="bubble">Dạ anh hoàn toàn yên tâm ạ. Bánh tạ được bọc 1 lớp cao su dày ở ngoài nên khi đặt xuống sàn rất êm, không gây tiếng ồn lớn ảnh hưởng xung quanh và không trầy xước sàn nền đâu ạ.</div>
+                    <div class="msg-timestamp">09:40</div>
+                </div>
+
+                <div class="msg-cluster sent">
+                    <div class="bubble">Nghe ổn đấy. Nhưng mình thấy giá hơi cao nhỉ, bên bạn có chương trình gì không?</div>
+                    <div class="msg-timestamp">09:45</div>
+                </div>
+
+                <div class="msg-cluster received">
+                    <div class="bubble">Dạ thưa anh, mức trên web là mức giá niêm yết. Nhưng hiện tại bên em đang có voucher giảm 10% và miễn phí vận chuyển bán kính 5km đó ạ!</div>
+                    <div class="msg-timestamp">09:47</div>
+                </div>
+
+                <div class="msg-cluster sent">
+                    <div class="bubble">Ồ, giảm 10% thì giá còn bao nhiêu vậy em?</div>
+                    <div class="msg-timestamp">09:50</div>
+                </div>
+
+                <div class="msg-cluster received">
+                    <div class="bubble">Dạ giá sau giảm sẽ chỉ còn 1.350.000đ thôi ạ. Anh có muốn chốt đơn luôn không để em tạo đơn ạ?</div>
+                    <div class="msg-timestamp">09:52</div>
+                </div>
+
+                <div class="msg-cluster sent">
+                    <div class="bubble">Mình vẫn hơi phân vân chất liệu cao su bạn bảo. Thường mấy loại cao su rẻ tiền nó có mùi hơi hắc, tập nhức đầu lắm.</div>
+                    <div class="msg-timestamp">09:55</div>
+                </div>
+
+                <div class="msg-cluster received">
+                    <div class="bubble">Dạ lớp bọc là cao su cao cấp đã qua xử lý khử mùi, không bị nồng nặc như hàng gia công kém chất lượng đâu ạ. Nếu anh ở gần, em mời anh qua thẳng cửa hàng bên em để trực tiếp trải nghiệm ạ!</div>
+                    <div class="msg-timestamp">10:00</div>
+                </div>
+
+                <div class="msg-cluster sent">
+                    <div class="bubble">Vậy cũng hợp lý. Anh có thể đến xem trực tiếp vào chiều mai được không?</div>
+                    <div class="msg-timestamp">10:05</div>
+                </div>
+
+                <div class="msg-cluster received">
+                    <div class="bubble">Dạ được ạ, em xin phép lên lịch hẹn để shop chuẩn bị đón tiếp anh chu đáo nhất nhé!</div>
+                    <div class="msg-timestamp">10:24</div>
+                </div>
+
+                <!-- Appointment Proposal Card -->
+                <div class="msg-cluster received">
+                    <div class="appt-card">
+                        <div class="appt-card-header"><i class="ph-fill ph-calendar-plus icon-blue"></i> Appointment Request</div>
+                        <div class="appt-card-body">
+                            <div class="appt-card-row"><span>Type</span><span>Product Viewing</span></div>
+                            <div class="appt-card-row"><span>Date</span><span>Wed, March 4</span></div>
+                            <div class="appt-card-row"><span>Time</span><span>04:00 PM</span></div>
+                        </div>
+                        <div class="appt-card-actions">
+                            <button class="btn-appt" onclick="openCancelModal(this)">Cancel</button>
+                            <button class="btn-appt primary" onclick="alert('Looking forward to it!')">Accept</button>
+                        </div>
+                    </div>
+                    <div class="msg-timestamp">10:25</div>
+                </div>
+
+            </div>
+
+            <!-- Input -->
+            <div class="chat-input-area">
+                <i class="ph ph-paperclip input-action"></i>
+                <i class="ph ph-smiley input-action"></i>
+                <div class="chat-input-wrapper">
+                    <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleEnter(event)">
+                </div>
+                <button class="btn-send" onclick="sendMessage()"><i class="ph-fill ph-paper-plane-right"></i></button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Cancellation Modal -->
+    <div class="modal-overlay" id="cancelModal">
+        <div class="modal-content">
+            <div class="modal-header">Xác nhận hủy lịch hẹn</div>
+            <div class="modal-body">Bạn có chắc chắn muốn hủy lịch hẹn này không? Hành động này không thể hoàn tác và hệ thống sẽ gửi thông báo đến đối tác.</div>
+            <div class="modal-actions">
+                <button class="btn-modal" onclick="closeCancelModal()">Không, giữ lại</button>
+                <button class="btn-modal danger" onclick="confirmCancel()">Có, hủy lịch</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatInput = document.getElementById('chatInput');
+        const chatHistory = document.getElementById('chatHistory');
+
+        function handleEnter(e) {
+            if(e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        const mockReplies = [
+            "Dạ vâng ạ, anh cân nhắc thêm nhé. Cần hỗ trợ gì cứ nhắn shop ạ!",
+            "Shop nhận được thông tin rồi, cảm ơn anh ạ.",
+            "Dạ hiện tại khung giờ đó bên em đang khá trống, anh có thể đến xem thoải mái ạ.",
+            "Vâng, nếu anh cần xem thêm ảnh thực tế thì em gửi qua luôn nhé ạ.",
+            "Cảm ơn anh đã quan tâm đến sản phẩm của GymGear VN!"
+        ];
+        let replyIndex = 0;
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if(!text) return;
+            
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+            const cluster = document.createElement('div');
+            cluster.className = 'msg-cluster sent';
+            cluster.innerHTML = `
+                <div class="bubble">${text}</div>
+                <div class="msg-timestamp">${timeStr}</div>
+            `;
+            
+            chatHistory.appendChild(cluster);
+            chatInput.value = '';
+            
+            // Scroll to bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Mock auto-reply
+            setTimeout(() => {
+                const replyText = mockReplies[replyIndex % mockReplies.length];
+                replyIndex++;
+                const reply = document.createElement('div');
+                reply.className = 'msg-cluster received';
+                reply.innerHTML = `
+                    <div class="bubble">${replyText}</div>
+                    <div class="msg-timestamp">${timeStr}</div>
+                `;
+                chatHistory.appendChild(reply);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }, 1000);
+        }
+
+        // initial scroll
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        // Dropdown Logic
+        const userProfileBtn = document.getElementById('userProfileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        if(userProfileBtn && profileDropdown) {
+            userProfileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', (e) => {
+                if(!userProfileBtn.contains(e.target)) profileDropdown.classList.remove('show');
+            });
+        }
+
+        // Cancellation Modal Logic
+        const cancelModal = document.getElementById('cancelModal');
+        let currentApptCard = null;
+
+        function openCancelModal(btnElement) {
+            currentApptCard = btnElement.closest('.appt-card');
+            cancelModal.classList.add('active');
+        }
+
+        function closeCancelModal() {
+            cancelModal.classList.remove('active');
+            currentApptCard = null;
+        }
+
+        function confirmCancel() {
+            if(currentApptCard) {
+                // Determine if it was sent by me or received to format the cancellation text accordingly
+                // Here we just apply a generic cancelled state replacing the card content
+                const originalBody = currentApptCard.querySelector('.appt-card-body').innerHTML;
+                currentApptCard.innerHTML = `
+                    <div class="appt-card-header"><i class="ph-fill ph-x-circle icon-red"></i> Lịch hẹn đã hủy</div>
+                    <div class="appt-card-body" style="text-decoration: line-through; opacity: 0.7;">
+                        ${originalBody}
+                    </div>
+                    <div class="appt-status cancelled"><i class="ph-bold ph-warning"></i> Đã hủy</div>
+                `;
+            }
+            closeCancelModal();
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+    </script>
+</body>
+</html>

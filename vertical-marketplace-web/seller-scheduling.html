@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Management - SportMarket</title>
+    <!-- Modern Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Modern Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --bg-body: #f3f4f6;
+            --bg-surface: #ffffff;
+            --border: #e5e7eb;
+            --font-family: 'Inter', sans-serif;
+            --sidebar-width: 240px;
+            --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.05);
+
+            --status-pending-bg: #fefce8;
+            --status-pending-text: #eab308;
+            --status-pending-border: #fef08a;
+
+            --status-confirmed-bg: #f0fdf4;
+            --status-confirmed-text: #10b981;
+            
+            --status-cancelled-bg: #fef2f2;
+            --status-cancelled-text: #dc2626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family); background-color: var(--bg-body); color: var(--text-main); display: flex; min-height: 100vh;
+        }
+
+        /* -----------------------
+           Sidebar Styles 
+           ----------------------- */
+        .sidebar {
+            width: var(--sidebar-width); background-color: var(--bg-surface); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; position: fixed; height: 100vh; top: 0; left: 0; z-index: 10;
+        }
+        .logo-section { padding: 24px; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-icon { color: var(--primary); font-size: 28px; }
+        .logo-text { font-size: 18px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+
+        .nav-menu { flex: 1; padding: 0 16px; display: flex; flex-direction: column; gap: 4px; margin-top: 12px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: all 0.2s ease; }
+        .nav-item:hover { background-color: var(--bg-body); color: var(--text-main); }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--primary); background-color: var(--primary-light); font-weight: 600; }
+        .nav-item.active i { color: var(--primary); }
+
+        .user-profile { margin-top: auto; padding: 20px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; cursor: pointer; position: relative; transition: background 0.2s; }
+        .user-profile:hover { background: var(--bg-body); }
+        .user-profile .avatar { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+        .user-profile .user-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .user-profile .user-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .user-profile .user-role { font-size: 13px; color: var(--text-muted); }
+        .user-profile i.ph-caret-down { color: var(--text-muted); }
+        
+        .profile-dropdown { position: absolute; bottom: calc(100% + 8px); left: 24px; right: 24px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.2s; z-index: 50; }
+        .profile-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 12px 16px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+        .dropdown-item:hover { background: var(--bg-body); }
+        .dropdown-item i { font-size: 18px; color: var(--text-muted); }
+        .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+        .text-danger { color: #dc2626; }
+        .text-danger i { color: #dc2626; }
+
+        /* -----------------------
+           Main Content 
+           ----------------------- */
+        .main-content {
+            margin-left: var(--sidebar-width); flex: 1; padding: 40px 60px; max-width: 1400px; margin-right: auto;
+        }
+
+        /* Header */
+        .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
+        .title-block h1 { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+        .title-block p { font-size: 15px; color: var(--text-muted); }
+        .btn-new { background: var(--primary); color: white; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 600; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; box-shadow: var(--shadow-card); }
+        .btn-new:hover { background: var(--primary-hover); }
+
+        /* Calendar Nav Strip */
+        .calendar-strip {
+            background: var(--bg-surface); padding: 24px 32px; border-radius: 16px; border: 1px solid var(--border);
+            box-shadow: var(--shadow-card); margin-bottom: 40px;
+        }
+        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 18px; font-weight: 700; }
+        .cal-arrows { display: flex; gap: 12px; }
+        .cal-arrows i { cursor: pointer; color: var(--text-muted); padding: 4px; font-size: 20px; transition: color 0.2s; }
+        .cal-arrows i:hover { color: var(--text-main); }
+
+        .days-row { display: flex; justify-content: space-between; gap: 16px; }
+        .day-card {
+            flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 0; border-radius: 12px;
+            background: #fdfdfd; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
+        }
+        .day-card:hover { border-color: #d1d5db; background: #f9fafb; }
+        .day-card.active { background: var(--primary); border-color: var(--primary); color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
+        .day-name { font-size: 14px; font-weight: 500; margin-bottom: 8px; color: inherit; opacity: 0.8; }
+        .day-num { font-size: 20px; font-weight: 700; color: inherit; }
+
+        /* Split body */
+        .sched-body { display: flex; gap: 40px; }
+        
+        /* Left: Main details */
+        .col-left { flex: 1.6; display: flex; flex-direction: column; gap: 24px; }
+        .col-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
+
+        .appt-card-lg {
+            background: white; padding: 24px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-card);
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .appt-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .appt-type-wrapper { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .appt-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .icon-blue { background: #eff6ff; color: #3b82f6; }
+        .icon-yellow { background: #fefce8; color: #eab308; }
+        .appt-title { font-size: 18px; font-weight: 700; color: var(--text-main); }
+        
+        .customer-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .customer-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+        .customer-name { font-size: 15px; font-weight: 600; color: var(--text-main); }
+
+        .appt-meta-list { display: flex; gap: 24px; color: var(--text-muted); font-size: 14px; margin-top: 8px; }
+        .appt-meta { display: flex; align-items: center; gap: 6px; }
+        .appt-meta i { font-size: 18px; }
+
+        .ticket-info { display: flex; align-items: center; gap: 8px; background: #f9fafb; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; color: var(--text-muted); }
+        .ticket-info i { color: var(--text-light); font-size: 18px; }
+
+        .status-alert { padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .status-alert.green { background: #dcfce7; color: #16a34a; }
+
+        .appt-actions { display: flex; gap: 12px; margin-top: 4px; }
+        .btn-action { flex: 1; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text-main); transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-action:hover { background: #f9fafb; }
+        .btn-primary-light { background: var(--primary-light); color: var(--primary); border-color: var(--primary-light); }
+        .btn-primary-light:hover { background: #dbeafe; }
+        
+        .tag-pending { background: var(--status-pending-bg); color: var(--status-pending-text); padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--status-pending-border); }
+        .tag-confirmed { background: var(--status-confirmed-bg); color: var(--status-confirmed-text); padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid #bbf7d0; }
+        .tag-cancelled { background: var(--status-cancelled-bg); color: var(--status-cancelled-text); padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid #fecaca; }
+
+        /* Right: Upcoming */
+        .col-right { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+        
+        .upcoming-list {
+            background: var(--bg-surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border);
+            display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow-card);
+        }
+        .mini-card {
+            padding: 16px; border: 1px solid var(--border); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s;
+        }
+        .mini-card:hover { border-color: var(--primary); background: var(--primary-light); }
+        .mini-left { display: flex; gap: 12px; align-items: flex-start; }
+        
+        .mini-customer-avatar { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+        .mini-info { display: flex; flex-direction: column; gap: 4px; }
+        .mini-title { font-size: 15px; font-weight: 600; color: var(--text-main); }
+        .mini-customer-name { font-size: 13px; color: var(--text-muted); }
+        .mini-time { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+        /* Appointment Modal (Same as buyer but with customer select) */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(100, 110, 120, 0.6); display: none; align-items: center; justify-content: center; z-index: 10000; opacity: 0; transition: opacity 0.2s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-card { background: white; width: 440px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); transform: translateY(20px); transition: transform 0.2s; }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+        .modal-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 18px; font-weight: 700; color: var(--text-main); }
+        .modal-close { background: #f3f4f6; border: none; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--text-muted); cursor: pointer; transition: background 0.2s; }
+        .modal-close:hover { background: #e5e7eb; color: var(--text-main); }
+        .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-row { display: flex; gap: 16px; }
+        .form-row .form-group { flex: 1; }
+        .form-label { font-size: 13px; font-weight: 600; color: var(--text-main); }
+        .form-control { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; color: var(--text-main); outline: none; transition: border-color 0.2s; font-family: inherit; background: white; appearance: none; }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+        .modal-footer { padding: 16px 24px; background: #f9fafb; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; border-radius: 0 0 12px 12px; }
+        .btn-cancel-modal { padding: 10px 20px; border: none; background: #f3f4f6; color: var(--text-muted); font-weight: 600; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .btn-cancel-modal:hover { background: #e5e7eb; color: var(--text-main); }
+        .btn-confirm { padding: 10px 20px; border: none; background: #3b82f6; color: white; font-weight: 600; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .btn-confirm:hover { background: #2563eb; }
+
+        /* Cancellation Confirmation Modal */
+        .cancel-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+            z-index: 20000; opacity: 0; visibility: hidden; transition: all 0.2s;
+        }
+        .cancel-overlay.active { opacity: 1; visibility: visible; }
+        .cancel-card {
+            background: white; border-radius: 12px; padding: 28px; width: 400px;
+            box-shadow: 0 20px 30px -5px rgba(0,0,0,0.15);
+            transform: translateY(20px); transition: transform 0.2s;
+        }
+        .cancel-overlay.active .cancel-card { transform: translateY(0); }
+        .cancel-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
+        .cancel-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+        .cancel-card-actions { display: flex; justify-content: flex-end; gap: 12px; }
+        .btn-keep { padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text-main); transition: background 0.2s; }
+        .btn-keep:hover { background: #f9fafb; }
+        .btn-confirm-cancel { padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; background: #dc2626; color: white; transition: background 0.2s; }
+        .btn-confirm-cancel:hover { background: #b91c1c; }
+    </style>
+</head>
+<body>
+    
+    <a href="index.html" style="position: fixed; bottom: 24px; right: 24px; background: #111827; color: white; padding: 12px 24px; border-radius: 50px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 9999; font-size: 14px; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px;">
+        <i class="ph ph-house"></i> Go to Directory
+    </a>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <a href="index.html" class="logo-section">
+            <div class="logo-icon"><i class="ph-fill ph-basketball"></i></div>
+            <div class="logo-text">SportMarket</div>
+        </a>
+
+        <!-- Menu -->
+        <nav class="nav-menu">
+            <a href="#" class="nav-item"><i class="ph ph-squares-four"></i> Dashboard</a>
+            <a href="#" class="nav-item"><i class="ph ph-chart-line-up"></i> Sales</a>
+            <a href="#" class="nav-item"><i class="ph ph-package"></i> Products</a>
+            <a href="seller-messaging.html" class="nav-item"><i class="ph ph-chat-circle-dots"></i> Messaging</a>
+            <a href="seller-scheduling.html" class="nav-item active"><i class="ph ph-calendar-blank"></i> Scheduling</a>
+            <a href="seller-reviews.html" class="nav-item"><i class="ph ph-star"></i> My Reviews</a>
+            <a href="#" class="nav-item"><i class="ph ph-gear"></i> Setting</a>
+        </nav>
+
+        <div class="user-profile" id="userProfileBtn">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=80" alt="GymGear VN" class="avatar">
+            <div class="user-info">
+                <span class="user-name">GymGear VN</span>
+                <span class="user-role">Seller</span>
+            </div>
+            <i class="ph ph-caret-down"></i>
+            
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="#" class="dropdown-item"><i class="ph ph-storefront"></i> Shop Profile</a>
+                <a href="#" class="dropdown-item"><i class="ph ph-gear"></i> Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="index.html" class="dropdown-item text-danger"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="title-block">
+                <h1>Appointment Management</h1>
+                <p>Track product viewings, deliveries, and consultations with customers</p>
+            </div>
+            <button class="btn-new" onclick="openApptModal()"><i class="ph-bold ph-plus"></i> New Appointment</button>
+        </div>
+
+        <!-- Calendar -->
+        <div class="calendar-strip">
+            <div class="cal-header">
+                <span>March 2026</span>
+                <div class="cal-arrows">
+                    <i class="ph-bold ph-caret-left"></i>
+                    <i class="ph-bold ph-caret-right"></i>
+                </div>
+            </div>
+            <div class="days-row">
+                <div class="day-card"><span class="day-name">Mon</span><span class="day-num">2</span></div>
+                <div class="day-card"><span class="day-name">Tue</span><span class="day-num">3</span></div>
+                <div class="day-card active"><span class="day-name">Wed</span><span class="day-num">4</span></div>
+                <div class="day-card"><span class="day-name">Thu</span><span class="day-num">5</span></div>
+                <div class="day-card"><span class="day-name">Fri</span><span class="day-num">6</span></div>
+                <div class="day-card"><span class="day-name">Sat</span><span class="day-num">7</span></div>
+                <div class="day-card"><span class="day-name">Sun</span><span class="day-num">8</span></div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="sched-body">
+            
+            <!-- Main Content: Selected Day -->
+            <div class="col-left">
+                <h2 class="col-title">Today's Appointments</h2>
+                
+                <!-- Card 1 -->
+                <div class="appt-card-lg">
+                    <div class="appt-header">
+                        <div>
+                            <div class="appt-type-wrapper">
+                                <div class="appt-icon icon-blue"><i class="ph-fill ph-eye"></i></div>
+                                <span class="appt-title">Product Viewing</span>
+                            </div>
+                            <div class="customer-row">
+                                <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&q=80" alt="Minh Tuấn" class="customer-avatar">
+                                <span class="customer-name">Minh Tuấn</span>
+                            </div>
+                            <div class="appt-meta-list">
+                                <div class="appt-meta"><i class="ph ph-clock"></i> 09:00 AM (30 minutes)</div>
+                                <div class="appt-meta"><i class="ph ph-map-pin"></i> Ho Chi Minh City</div>
+                            </div>
+                        </div>
+                        <div class="tag-confirmed">Confirmed</div>
+                    </div>
+
+                    <div class="ticket-info">
+                        <i class="ph ph-tag"></i> Nike Air Max 90
+                    </div>
+
+                    <div class="appt-actions">
+                        <button class="btn-action" onclick="openCancelModal(this)">Cancel</button>
+                        <a href="seller-messaging.html" style="text-decoration:none;" class="btn-action btn-primary-light">
+                            <i class="ph ph-chat-circle-dots"></i> Messaging
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="appt-card-lg">
+                    <div class="appt-header">
+                        <div>
+                            <div class="appt-type-wrapper">
+                                <div class="appt-icon icon-yellow"><i class="ph-fill ph-package"></i></div>
+                                <span class="appt-title">Pickup</span>
+                            </div>
+                            <div class="customer-row">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Thu Ha" class="customer-avatar">
+                                <span class="customer-name">Thu Ha</span>
+                            </div>
+                            <div class="appt-meta-list">
+                                <div class="appt-meta"><i class="ph ph-clock"></i> 02:00 PM (45 minutes)</div>
+                                <div class="appt-meta"><i class="ph ph-map-pin"></i> Ha Noi City</div>
+                            </div>
+                        </div>
+                        <div class="tag-confirmed">Confirmed</div>
+                    </div>
+
+                    <div class="ticket-info">
+                        <i class="ph ph-tag"></i> Bo Ta Tay 20kg
+                    </div>
+
+                    <div class="status-alert green">
+                        <i class="ph-fill ph-check-circle"></i> Pickup appointment confirmed
+                    </div>
+
+                    <div class="appt-actions">
+                        <button class="btn-action" onclick="openCancelModal(this)">Cancel</button>
+                        <a href="#" style="text-decoration:none;" class="btn-action btn-primary-light">
+                            <i class="ph ph-chat-circle-dots"></i> Messaging
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Upcoming List -->
+            <div class="col-right">
+                <h2 class="col-title">Upcoming</h2>
+                
+                <div class="upcoming-list">
+                    <!-- Item 1 -->
+                    <div class="mini-card" onclick="alert('View details')">
+                        <div class="mini-left">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Hoang Nam" class="mini-customer-avatar">
+                            <div class="mini-info">
+                                <span class="mini-title">Consultation</span>
+                                <span class="mini-customer-name">Hoang Nam</span>
+                                <span class="mini-time">Thu, March 5 • 10:00 AM</span>
+                            </div>
+                        </div>
+                        <div class="tag-confirmed">Confirmed</div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="mini-card" onclick="alert('View details')">
+                        <div class="mini-left">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Lan Anh" class="mini-customer-avatar">
+                            <div class="mini-info">
+                                <span class="mini-title">Product Viewing</span>
+                                <span class="mini-customer-name">Lan Anh</span>
+                                <span class="mini-time">Fri, March 6 • 03:30 PM</span>
+                            </div>
+                        </div>
+                        <div class="tag-pending">Pending</div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="mini-card" onclick="alert('View details')">
+                        <div class="mini-left">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Duc Anh" class="mini-customer-avatar">
+                            <div class="mini-info">
+                                <span class="mini-title">Pickup</span>
+                                <span class="mini-customer-name">Duc Anh</span>
+                                <span class="mini-time">Sat, March 7 • 09:00 AM</span>
+                            </div>
+                        </div>
+                        <div class="tag-confirmed">Confirmed</div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="mini-card" onclick="alert('View details')">
+                        <div class="mini-left">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&q=80" alt="Mai Linh" class="mini-customer-avatar">
+                            <div class="mini-info">
+                                <span class="mini-title">Product Viewing</span>
+                                <span class="mini-customer-name">Mai Linh</span>
+                                <span class="mini-time">Sun, March 8 • 02:00 PM</span>
+                            </div>
+                        </div>
+                        <div class="tag-cancelled">Cancelled</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Cancel Confirmation Modal -->
+    <div class="cancel-overlay" id="cancelConfirmModal">
+        <div class="cancel-card">
+            <h3>Xác nhận hủy lịch hẹn</h3>
+            <p>Bạn có chắc chắn muốn hủy lịch hẹn này không? Hành động này không thể hoàn tác và khách hàng sẽ được thông báo.</p>
+            <div class="cancel-card-actions">
+                <button class="btn-keep" onclick="closeCancelModal()">Không, giữ lại</button>
+                <button class="btn-confirm-cancel" onclick="confirmCancelAppt()">Có, hủy lịch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Appointment Modal -->
+    <div class="modal-overlay" id="apptModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="modal-title">Create New Appointment</span>
+                <button class="modal-close" onclick="closeApptModal()"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Appointment Type</label>
+                    <div style="position:relative">
+                        <select class="form-control">
+                            <option>Product Viewing</option>
+                            <option>Consultation</option>
+                            <option>Store Pickup</option>
+                        </select>
+                        <i class="ph ph-caret-down" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#9ca3af; pointer-events:none;"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Select Customer</label>
+                    <div style="position:relative">
+                        <select class="form-control">
+                            <option>Minh Tuấn</option>
+                            <option>Thu Ha</option>
+                            <option>Hoang Nam</option>
+                        </select>
+                        <i class="ph ph-caret-down" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#9ca3af; pointer-events:none;"></i>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" value="2026-03-04">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time</label>
+                        <div style="position:relative">
+                            <select class="form-control">
+                                <option>09:00 AM</option>
+                                <option>10:00 AM</option>
+                                <option>02:00 PM</option>
+                            </select>
+                            <i class="ph ph-caret-down" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#9ca3af; pointer-events:none;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Address / Notes</label>
+                    <textarea class="form-control" style="height: 60px;" placeholder="Optional details..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel-modal" onclick="closeApptModal()">Cancel</button>
+                <button class="btn-confirm" onclick="submitAppt()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Logic
+        const apptModal = document.getElementById('apptModal');
+        window.openApptModal = () => apptModal.classList.add('active');
+        window.closeApptModal = () => apptModal.classList.remove('active');
+        window.submitAppt = () => {
+            alert('Appointment created!');
+            closeApptModal();
+        };
+
+        // Cancel Confirmation Modal
+        const cancelConfirmModal = document.getElementById('cancelConfirmModal');
+        let cancelTargetBtn = null;
+
+        function openCancelModal(btn) {
+            cancelTargetBtn = btn;
+            cancelConfirmModal.classList.add('active');
+        }
+        function closeCancelModal() {
+            cancelConfirmModal.classList.remove('active');
+            cancelTargetBtn = null;
+        }
+        function confirmCancelAppt() {
+            if(cancelTargetBtn) {
+                const card = cancelTargetBtn.closest('.appt-large-card, .appt-card-lg, .appt-card');
+                if(card) {
+                    const tagEl = card.querySelector('.tag-pending, .tag-confirmed');
+                    if(tagEl) { tagEl.textContent = 'Cancelled'; tagEl.className = ''; tagEl.style.cssText = 'background:#fee2e2;color:#dc2626;border:1px solid #fecaca;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;'; }
+                    const actions = card.querySelector('.appt-actions');
+                    if(actions) actions.remove();
+                }
+            }
+            closeCancelModal();
+        }
+
+        // Open specific feature based on hash
+        if(window.location.hash === '#new') {
+            setTimeout(openApptModal, 100);
+        }
+
+        // Dropdown Logic
+        const userProfileBtn = document.getElementById('userProfileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        if(userProfileBtn && profileDropdown) {
+            userProfileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            document.addEventListener('click', (e) => {
+                if(!userProfileBtn.contains(e.target)) profileDropdown.classList.remove('show');
+            });
+        }
+    </script>
+</body>
+</html>

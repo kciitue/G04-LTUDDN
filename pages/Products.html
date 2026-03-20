@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportMarket - Product Intelligence</title>
+    <link rel="stylesheet" href="../css/Layouts.css">
+    <link rel="stylesheet" href="../css/Style.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="logo" style="display: flex; align-items: center; gap: 8px;">
+                <img src="../assets/images/logo.png" alt="SportMarket Logo" style="width: 28px; height: 28px; object-fit: contain;"> 
+                
+                <span style="font-weight: 700; font-size: 20px; color: #0F172A;">SportMarket</span>
+            </div>
+            <nav style="display: flex; flex-direction: column; gap: 8px; margin-top: 32px; padding: 0 16px;">
+                <a href="Overview.html" class="nav-item active">
+                    <img src="../assets/images/dashboard.png" alt="Dashboard" class="nav-icon"> 
+                    Dashboard
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../assets/images/sale.png" alt="Sales" class="nav-icon"> 
+                    Sales
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../assets/images/products.png" alt="Products" class="nav-icon"> 
+                    Products
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../assets/images/message.png" alt="Messaging" class="nav-icon"> 
+                    Messaging
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../assets/images/schedule.png" alt="Scheduling" class="nav-icon"> 
+                    Scheduling
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../assets/images/setting.png" alt="Setting" class="nav-icon"> 
+                    Setting
+                </a>
+            </nav>
+            <div class="user-profile">
+                <img src="../assets/images/sellerPro5.png" alt="GymGear VN" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">GymGear VN</div>
+                    <div style="color: #64748B; font-size: 12px;">Seller</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-wrapper">
+
+            <header class="top-bar">
+                <nav class="top-tabs">
+                    <a href="Overview.html" class="top-tab-item">Overview</a>
+                    <a href="Products.html" class="top-tab-item active">Product Intelligence</a>
+                    <a href="CustomerInsight.html" class="top-tab-item">Customer Insights</a>
+                    <a href="Inventory.html" class="top-tab-item">Inventory</a>
+                </nav>
+            </header>
+
+            <div class="page-content">
+
+                <div class="page-header" style="align-items: flex-start;">
+                    <div>
+                        <h1 class="page-title">Product & Size Intelligence</h1>
+                        <p class="page-subtitle">Real-time product performance and returns analytics across global regions.</p>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 16px;">
+    
+                        <div class="pill-nav category-filter" style="display: flex; gap: 8px;">
+                            <button class="pill-btn active">Shirts</button>
+                            <button class="pill-btn">Pants</button>
+                            <button class="pill-btn">Shoes</button>
+                            <button class="pill-btn">Accessories</button>
+                        </div>
+
+                        <select class="select-box gender-filter" style="padding: 8px 16px; border: 1px solid #E2E8F0; border-radius: 20px; font-family: inherit; color: #0F172A; font-weight: 500; outline: none; cursor: pointer; background-color: white;">
+                            <option value="All Genders">All Genders</option>
+                            <option value="Men">Men</option>
+                            <option value="Women">Women</option>
+                            <option value="Unisex">Unisex</option> 
+                        </select>
+                    </div>
+                </div>
+
+                <div class="chart-grid-2-1">
+
+                    <div class="card">
+                        <div class="page-header" style="margin-bottom: 16px;">
+                            <div class="card-title" style="margin: 0;">
+                                <span style="color: #3B82F6; margin-right: 8px;">📊</span> Revenue by Sport Category
+                            </div>
+                            <span class="badge positive">+12.5% vs LW</span>
+                        </div>
+                        <div id="productRevenueChart" style="min-height: 300px;"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">
+                            <span style="color: #EF4444; margin-right: 8px;">📦</span> Return Reasons
+                        </div>
+                        
+                        <div id="returnReasonsChart" style="min-height: 220px; display: flex; justify-content: center; margin-top: 16px;"></div>
+                        
+                        <div class="custom-legend" style="margin-top: 16px; padding: 0 20px;">
+                            <div class="legend-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #3B82F6;"></div>
+                                    <span style="color: #64748B; font-size: 13px;">Wrong Size</span>
+                                </div>
+                                <span id="val-wrong-size" style="font-weight: 700; font-size: 16px; color: #0F172A;">62%</span>
+                            </div>
+                            
+                            <div class="legend-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #93C5FD;"></div>
+                                    <span style="color: #64748B; font-size: 13px;">Color Mismatch</span>
+                                </div>
+                                <span id="val-color" style="font-weight: 700; font-size: 16px; color: #0F172A;">24%</span>
+                            </div>
+                            
+                            <div class="legend-row" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #E2E8F0;"></div>
+                                    <span style="color: #64748B; font-size: 13px;">Fabric Defect</span>
+                                </div>
+                                <span id="val-fabric" style="font-weight: 700; font-size: 16px; color: #0F172A;">14%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 24px;">
+                    <div class="page-header" style="margin-bottom: 24px;">
+                        <div class="card-title" style="margin: 0;">
+                            <span style="color: #3B82F6; margin-right: 8px;">🎛️</span> Sales Intensity Heatmap
+                        </div>
+                        <div style="font-size: 12px; color: #64748B; display: flex; gap: 4px; align-items: center;">
+                            LOW
+                            <div style="width: 12px; height: 12px; background: #DBEAFE; border-radius: 2px;"></div>
+                            <div style="width: 12px; height: 12px; background: #93C5FD; border-radius: 2px;"></div>
+                            <div style="width: 12px; height: 12px; background: #3B82F6; border-radius: 2px;"></div>
+                            HIGH
+                        </div>
+                    </div>
+
+                    <div class="heatmap-container">
+                        <div class="heatmap-header">
+                            <div style="text-align: left;">COLOR / SIZE</div>
+                            <div>S</div>
+                            <div>M</div>
+                            <div>L</div>
+                            <div>XL</div>
+                            <div>XXL</div>
+                        </div>
+
+                        <div class="heatmap-row">
+                            <div class="heatmap-label">Deep Black</div>
+                            <div class="heatmap-cell" style="background: #3B82F6;">1.2k</div> <div class="heatmap-cell" style="background: #60A5FA;">950</div>
+                            <div class="heatmap-cell" style="background: #2563EB;">1.4k</div>
+                            <div class="heatmap-cell" style="background: #93C5FD; color: #0F172A;">720</div>
+                            <div class="heatmap-cell" style="background: #BFDBFE; color: #0F172A;">310</div>
+                        </div>
+
+                        <div class="heatmap-row">
+                            <div class="heatmap-label">Arctic White</div>
+                            <div class="heatmap-cell" style="background: #93C5FD; color: #0F172A;">480</div>
+                            <div class="heatmap-cell" style="background: #3B82F6;">1.1k</div>
+                            <div class="heatmap-cell" style="background: #60A5FA;">890</div>
+                            <div class="heatmap-cell" style="background: #DBEAFE; color: #0F172A;">240</div>
+                            <div class="heatmap-cell" style="background: #EFF6FF; color: #0F172A;">120</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="page-header" style="margin-bottom: 16px;">
+                        <div class="card-title" style="margin: 0;">Top Performing Products</div>
+                        <select class="select-box" style="padding: 4px 8px; font-size: 12px;">
+                            <option>≡ SORT BY SALES VELOCITY</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="data-table-header">
+                            <div style="padding-left: 16px;">PRODUCT NAME</div>
+                            <div>CATEGORY</div>
+                            <div>REVENUE</div>
+                            <div>STOCK STATUS</div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 16px;">
+    
+                        <div style="width: 48px; height: 48px; background-color: #F0F6FF; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
+                            <img src="../assets/images/shirt.png" alt="Aero-Cool Tee" style="width: 28px; height: 28px; object-fit: contain;">
+                        </div>
+                        
+                        <div>
+                            <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Aero-Cool Runner Tee</div>
+                            <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: RUN-001-BL</div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

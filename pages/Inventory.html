@@ -69,22 +69,22 @@
 
             <div class="page-content">
 
-                <div class="page-header" style="align-items: flex-start; margin-bottom: 24;">
+                <div class="page-header" style="align-items: flex-start; margin-bottom: 24px;">
                     <div>
                         <h1 class="page-title">Inventory Forecasting</h1>
                         <p class="page-subtitle">Predictive stock management</p>
                     </div>
 
-                    <div class="pill-nav" style="background: transparent; border: 1px solid #E5E7EB;">
+                    <div class="pill-nav">
                         <button class="pill-btn">Next 7 Days</button>
-                        <button class="pill-btn">Next 30 Days</button>
+                        <button class="pill-btn active">Next 30 Days</button>
                         <button class="pill-btn">Next 90 Days</button>
                     </div>
                 </div>
 
-                <div class="grid-3-cols">
+                <div class="grid-3-cols" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px;">
                     <div class="card">
-                        <div class="date-label" style="margin-bottom: 12px;">DAYS OF SUPPLY</div>
+                        <div class="date-label" style="margin-bottom: 12px; color: #64748B; font-size: 12px; font-weight: 700;">DAYS OF SUPPLY</div>
                         <div style="display: flex; align-items: baseline; gap: 8px;">
                             <span style="font-size: 28px; font-weight: 700;">18 Days</span>
                             <span style="color: #EF4444; font-weight: 600; font-size: 14px;">↘ -4</span>
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div class="date-label">STOCK HEALTH</div>
+                        <div class="date-label" style="color: #64748B; font-size: 12px; font-weight: 700;">STOCK HEALTH</div>
                         <div style="display: flex; align-items: center; gap: 16px;">
                             <div style="width: 50px; height: 50px; border-radius: 50%; border: 4px solid #E2E8F0; border-top-color: #3B82F6; border-right-color: #3B82F6; border-bottom-color: #3B82F6; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px;">75%</div>
                             <div>
@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="card">
-                        <div class="date-label" style="margin-bottom: 12px;">REPLENISHMENT NEEDED</div>
+                        <div class="date-label" style="margin-bottom: 12px; color: #64748B; font-size: 12px; font-weight: 700;">REPLENISHMENT NEEDED</div>
                         <div style="display: flex; align-items: baseline; gap: 8px;">
                             <span style="font-size: 28px; font-weight: 700;">$42.4k</span>
                             <span style="color: #64748B; font-weight: 500; font-size: 14px;">Recommended Order</span>
@@ -113,64 +113,49 @@
                     </div>
                 </div>
 
-                <div class="chart-grid-2-1">
+                <div class="chart-grid-2-1" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; align-items: stretch;">
 
-                    <div class="card">
-                        <div class="page-header" style="margin-bottom: 24px;">
-                        </div>
-
-                        <div id="stockDemandChart" style="min-height: 240px; margin: 0;"></div>
+                    <div class="card" style="min-width: 0;">
+                        <div class="card-title" style="margin-bottom: 16px;">Stock Demand vs Supply</div>
+                        <div id="stockDemandChart" style="min-height: 240px; width: 100%;"></div>
                     </div>
 
-                    <div class="card">
-                        <div class="alert-header">
+                    <div class="card" style="min-width: 0; display: flex; flex-direction: column;">
+                        <div class="alert-header" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
                             <div class="card-title" style="margin: 0; display: flex; align-items: center; gap: 8px;">
                                 <span style="color: #EF4444;">⚠️</span> Low Stock Alerts
                             </div>
-                            <div class="alert-badge">12 Items</div>
+                            <div class="alert-badge" style="background: #FEE2E2; color: #EF4444; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 700;">3 Items</div>
                         </div>
 
-                        <div class="alert-list">
-                            <div class="alert-item">
-                                <div class="alert-img" style="width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    
+                        <div class="alert-list" style="display: flex; flex-direction: column; gap: 16px;">
+                            <div class="alert-item" style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background-color: #F8FAFC;">
                                     <img src="../assets/images/pro3.png" alt="Nike Air Zoom" style="width: 100%; height: 100%; object-fit: cover;">
-                                    
                                 </div>
-                                
                                 <div>
-                                    <div class="alert-title">Nike Air Zoom</div>
-                                    <div class="alert-tag critical">CRITICAL: 2 DAYS LEFT</div>
+                                    <div style="font-weight: 600; color: #0F172A; font-size: 14px;">Nike Air Zoom</div>
+                                    <div style="color: #EF4444; font-size: 11px; font-weight: 700; margin-top: 4px;">CRITICAL: 2 DAYS LEFT</div>
                                 </div>
                             </div>
 
-                            <div class="alert-item">
-                                <div class="alert-img" style="width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                            <div class="alert-item" style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background-color: #F8FAFC;">
                                     <img src="../assets/images/pro5.png" alt="Fleece" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div>
-                                    <div class="alert-title">Tech Fleece...</div>
-                                    <div class="alert-tag warning">WARNING: 5 DAYS LEFT</div>
+                                    <div style="font-weight: 600; color: #0F172A; font-size: 14px;">Tech Fleece Joggers</div>
+                                    <div style="color: #F59E0B; font-size: 11px; font-weight: 700; margin-top: 4px;">WARNING: 5 DAYS LEFT</div>
                                 </div>
                             </div>
 
-                            <div class="alert-item">
-                                <div class="alert-img" style="width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="../assets/images/pro6.png" alt="Wilson" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <div>
-                                    <div class="alert-title">Wilson Pro S..</div>
-                                    <div class="alert-tag warning">WARNING: 8 DAYS LEFT</div>
-                                </div>
-                            </div>
-
-                            <div class="alert-item">
-                                <div class="alert-img" style="width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                            <div class="alert-item" style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background-color: #F8FAFC;">
                                     <img src="../assets/images/pro7.png" alt="Swift Run" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div>
-                                    <div class="alert-title">Swift Run 2.0</div>
-                                    <div class="alert-tag critical">CRITICAL: 1 DAY LEFT</div>
+                                    <div style="font-weight: 600; color: #0F172A; font-size: 14px;">Swift Run 2.0</div>
+                                    <div style="color: #EF4444; font-size: 11px; font-weight: 700; margin-top: 4px;">CRITICAL: 1 DAY LEFT</div>
                                 </div>
                             </div>
                         </div>
@@ -178,107 +163,71 @@
                 </div>
 
                 <div class="card" style="padding: 0; overflow: hidden;">
-                    <div class="card-title" style="padding: 24px 24px 0 24px;">SKU Forecast Analysis</div>
+                    <div class="card-title" style="padding: 24px 24px 16px 24px; margin: 0;">SKU Forecast Analysis</div>
 
-                    <div class="sku-table-header">
-                        <div style="padding-left: 24px;">PRODUCT DETAILS</div>
-                        <div>CURRENT STOCK</div>
-                        <div>DAYS OF SUPPLY</div>
-                        <div>DEMAND FORECAST (30D)</div>
-                        <div>RECOMMENDED ORDER</div>
-                    </div>
-
-                    <div class="inventory-list" style="display: flex; flex-direction: column; width: 100%;">
-
-                        <div style="display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1fr 1fr; align-items: center; padding: 16px 20px; border-bottom: 1px solid #F1F5F9; gap: 16px;">
-                            
-                            <div style="display: flex; align-items: center; gap: 16px;">
-                                <div style="width: 48px; height: 48px; background-color: #F8FAFC; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
-                                    <img src="../assets/images/sneaker.png" alt="Air Max" style="width: 28px; height: 28px; object-fit: contain;">
-                                </div>
-                                <div>
-                                    <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Air Max Plus v2</div>
-                                    <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: NIKE-AM-2023</div>
-                                </div>
-                            </div>
-
-                            <div style="color: #475569; font-size: 14px;">450 Units</div>
-
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 48px; height: 4px; background-color: #E2E8F0; border-radius: 2px; overflow: hidden;">
-                                    <div style="width: 80%; height: 100%; background-color: #3B82F6; border-radius: 2px;"></div>
-                                </div>
-                                <div style="line-height: 1.2;">
-                                    <div style="font-weight: 600; color: #0F172A; font-size: 13px;">42</div>
-                                    <div style="color: #64748B; font-size: 11px;">Days</div>
-                                </div>
-                            </div>
-
-                            <div style="color: #475569; font-size: 14px;">1,240 Units</div>
-
-                            <div style="font-weight: 700; color: #0F172A; font-size: 14px;">800 Units</div>
+                    <div style="width: 100%; overflow-x: auto;">
+                        <div style="display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1fr 1fr; padding: 12px 24px; color: #64748B; font-size: 12px; font-weight: 700; border-bottom: 1px solid #E2E8F0; background-color: #F8FAFC;">
+                            <div>PRODUCT DETAILS</div>
+                            <div>CURRENT STOCK</div>
+                            <div>DAYS OF SUPPLY</div>
+                            <div>FORECAST (30D)</div>
+                            <div>REC. ORDER</div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1fr 1fr; align-items: center; padding: 16px 20px; border-bottom: 1px solid #F1F5F9; gap: 16px;">
-                            
-                            <div style="display: flex; align-items: center; gap: 16px;">
-                                <div style="width: 48px; height: 48px; background-color: #F8FAFC; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
-                                    <img src="../assets/images/shirt.png" alt="Dri-FIT" style="width: 28px; height: 28px; object-fit: contain;">
+                        <div class="inventory-list" style="display: flex; flex-direction: column; width: 100%; min-width: 800px;">
+
+                            <div style="display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1fr 1fr; align-items: center; padding: 16px 24px; border-bottom: 1px solid #F1F5F9; gap: 16px;">
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <div style="width: 48px; height: 48px; border-radius: 8px; background-color: #F8FAFC; overflow: hidden; flex-shrink: 0;">
+                                        <img src="../assets/images/sneaker.png" alt="Air Max" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Air Max Plus v2</div>
+                                        <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: NIKE-AM-2023</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Dri-FIT Academy</div>
-                                    <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: DRIFIT-AC-01</div>
+                                <div style="color: #475569; font-size: 14px;">450 Units</div>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 60px; height: 6px; background-color: #E2E8F0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 80%; height: 100%; background-color: #3B82F6; border-radius: 3px;"></div>
+                                    </div>
+                                    <div style="line-height: 1.2;">
+                                        <div style="font-weight: 600; color: #0F172A; font-size: 13px;">42</div>
+                                        <div style="color: #64748B; font-size: 11px;">Days</div>
+                                    </div>
                                 </div>
+                                <div style="color: #475569; font-size: 14px;">1,240 Units</div>
+                                <div style="font-weight: 700; color: #0F172A; font-size: 14px;">800 Units</div>
                             </div>
 
-                            <div style="color: #475569; font-size: 14px;">12 Units</div>
-
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 48px; height: 4px; background-color: #E2E8F0; border-radius: 2px; overflow: hidden;">
-                                    <div style="width: 10%; height: 100%; background-color: #EF4444; border-radius: 2px;"></div>
+                            <div style="display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1fr 1fr; align-items: center; padding: 16px 24px; border-bottom: 1px solid #F1F5F9; gap: 16px;">
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <div style="width: 48px; height: 48px; border-radius: 8px; background-color: #F8FAFC; overflow: hidden; flex-shrink: 0;">
+                                        <img src="../assets/images/shirt.png" alt="Dri-FIT" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Dri-FIT Academy</div>
+                                        <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: DRIFIT-AC-01</div>
+                                    </div>
                                 </div>
-                                <div style="line-height: 1.2;">
-                                    <div style="font-weight: 600; color: #EF4444; font-size: 13px;">2</div>
-                                    <div style="color: #EF4444; font-size: 11px;">Days</div>
+                                <div style="color: #475569; font-size: 14px;">12 Units</div>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 60px; height: 6px; background-color: #E2E8F0; border-radius: 3px; overflow: hidden;">
+                                        <div style="width: 10%; height: 100%; background-color: #EF4444; border-radius: 3px;"></div>
+                                    </div>
+                                    <div style="line-height: 1.2;">
+                                        <div style="font-weight: 600; color: #EF4444; font-size: 13px;">2</div>
+                                        <div style="color: #EF4444; font-size: 11px;">Days</div>
+                                    </div>
                                 </div>
+                                <div style="color: #475569; font-size: 14px;">320 Units</div>
+                                <div style="font-weight: 700; color: #EF4444; font-size: 14px;">350 Units</div>
                             </div>
 
-                            <div style="color: #475569; font-size: 14px;">320 Units</div>
-
-                            <div style="font-weight: 700; color: #EF4444; font-size: 14px;">350 Units</div>
                         </div>
-
-                        <div style="display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1fr 1fr; align-items: center; padding: 16px 20px; border-bottom: 1px solid #F1F5F9; gap: 16px;">
-                            
-                            <div style="display: flex; align-items: center; gap: 16px;">
-                                <div style="width: 48px; height: 48px; background-color: #F8FAFC; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
-                                    <img src="../assets/images/backpack.png" alt="Bag" style="width: 28px; height: 28px; object-fit: contain;">
-                                </div>
-                                <div>
-                                    <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Utility Elite Bag</div>
-                                    <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: UTEL-BG-XL</div>
-                                </div>
-                            </div>
-
-                            <div style="color: #475569; font-size: 14px;">84 Units</div>
-
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 48px; height: 4px; background-color: #E2E8F0; border-radius: 2px; overflow: hidden;">
-                                    <div style="width: 30%; height: 100%; background-color: #F59E0B; border-radius: 2px;"></div>
-                                </div>
-                                <div style="line-height: 1.2;">
-                                    <div style="font-weight: 600; color: #F59E0B; font-size: 13px;">11</div>
-                                    <div style="color: #F59E0B; font-size: 11px;">Days</div>
-                                </div>
-                            </div>
-
-                            <div style="color: #475569; font-size: 14px;">185 Units</div>
-
-                            <div style="font-weight: 700; color: #0F172A; font-size: 14px;">120 Units</div>
-                        </div>
-
                     </div>
                 </div>
+
             </div>
         </main>
     </div>

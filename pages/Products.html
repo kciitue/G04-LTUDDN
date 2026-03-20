@@ -69,14 +69,13 @@
 
             <div class="page-content">
 
-                <div class="page-header" style="align-items: flex-start;">
+                <div class="page-header" style="align-items: flex-start; margin-bottom: 24px;">
                     <div>
                         <h1 class="page-title">Product & Size Intelligence</h1>
                         <p class="page-subtitle">Real-time product performance and returns analytics across global regions.</p>
                     </div>
 
                     <div style="display: flex; align-items: center; gap: 16px;">
-    
                         <div class="pill-nav category-filter" style="display: flex; gap: 8px;">
                             <button class="pill-btn active">Shirts</button>
                             <button class="pill-btn">Pants</button>
@@ -84,7 +83,7 @@
                             <button class="pill-btn">Accessories</button>
                         </div>
 
-                        <select class="select-box gender-filter" style="padding: 8px 16px; border: 1px solid #E2E8F0; border-radius: 20px; font-family: inherit; color: #0F172A; font-weight: 500; outline: none; cursor: pointer; background-color: white;">
+                        <select class="select-box gender-filter" style="padding: 8px 16px; border: 1px solid #E2E8F0; border-radius: 8px; font-family: inherit; font-size: 14px; color: #0F172A; font-weight: 500; outline: none; cursor: pointer; background-color: white;">
                             <option value="All Genders">All Genders</option>
                             <option value="Men">Men</option>
                             <option value="Women">Women</option>
@@ -93,26 +92,26 @@
                     </div>
                 </div>
 
-                <div class="chart-grid-2-1">
-
-                    <div class="card">
+                <div class="chart-grid-2-1" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; align-items: stretch;">
+                    
+                    <div class="card" style="min-width: 0;">
                         <div class="page-header" style="margin-bottom: 16px;">
                             <div class="card-title" style="margin: 0;">
                                 <span style="color: #3B82F6; margin-right: 8px;">📊</span> Revenue by Sport Category
                             </div>
                             <span class="badge positive">+12.5% vs LW</span>
                         </div>
-                        <div id="productRevenueChart" style="min-height: 300px;"></div>
+                        <div id="productRevenueChart" style="min-height: 300px; width: 100%;"></div>
                     </div>
 
-                    <div class="card">
+                    <div class="card" style="min-width: 0; display: flex; flex-direction: column;">
                         <div class="card-title">
                             <span style="color: #EF4444; margin-right: 8px;">📦</span> Return Reasons
                         </div>
                         
-                        <div id="returnReasonsChart" style="min-height: 220px; display: flex; justify-content: center; margin-top: 16px;"></div>
+                        <div id="returnReasonsChart" style="margin-top: 16px; width: 100%; display: block;"></div>
                         
-                        <div class="custom-legend" style="margin-top: 16px; padding: 0 20px;">
+                        <div class="custom-legend" style="margin-top: auto; padding: 0 16px;">
                             <div class="legend-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #3B82F6;"></div>
@@ -120,7 +119,6 @@
                                 </div>
                                 <span id="val-wrong-size" style="font-weight: 700; font-size: 16px; color: #0F172A;">62%</span>
                             </div>
-                            
                             <div class="legend-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #93C5FD;"></div>
@@ -128,7 +126,6 @@
                                 </div>
                                 <span id="val-color" style="font-weight: 700; font-size: 16px; color: #0F172A;">24%</span>
                             </div>
-                            
                             <div class="legend-row" style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <div style="width: 12px; height: 12px; border-radius: 50%; background-color: #E2E8F0;"></div>
@@ -139,8 +136,6 @@
                         </div>
                     </div>
                 </div>
-                </div>
-
                 <div class="card" style="margin-bottom: 24px;">
                     <div class="page-header" style="margin-bottom: 24px;">
                         <div class="card-title" style="margin: 0;">
@@ -167,7 +162,8 @@
 
                         <div class="heatmap-row">
                             <div class="heatmap-label">Deep Black</div>
-                            <div class="heatmap-cell" style="background: #3B82F6;">1.2k</div> <div class="heatmap-cell" style="background: #60A5FA;">950</div>
+                            <div class="heatmap-cell" style="background: #3B82F6;">1.2k</div> 
+                            <div class="heatmap-cell" style="background: #60A5FA;">950</div>
                             <div class="heatmap-cell" style="background: #2563EB;">1.4k</div>
                             <div class="heatmap-cell" style="background: #93C5FD; color: #0F172A;">720</div>
                             <div class="heatmap-cell" style="background: #BFDBFE; color: #0F172A;">310</div>
@@ -187,30 +183,61 @@
                 <div class="card">
                     <div class="page-header" style="margin-bottom: 16px;">
                         <div class="card-title" style="margin: 0;">Top Performing Products</div>
-                        <select class="select-box" style="padding: 4px 8px; font-size: 12px;">
-                            <option>≡ SORT BY SALES VELOCITY</option>
+                        <select class="select-box" style="padding: 6px 12px; font-size: 13px; border-radius: 6px; border: 1px solid #E2E8F0; outline: none; cursor: pointer;">
+                            <option>SORT BY VELOCITY</option>
                         </select>
                     </div>
 
-                    <div>
-                        <div class="data-table-header">
-                            <div style="padding-left: 16px;">PRODUCT NAME</div>
+                    <div class="data-table-container" style="width: 100%; overflow-x: auto;">
+                        <div style="display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; padding: 12px 16px; color: #64748B; font-size: 12px; font-weight: 700; border-bottom: 1px solid #E2E8F0; background-color: #F8FAFC; border-radius: 8px 8px 0 0;">
+                            <div>PRODUCT NAME</div>
                             <div>CATEGORY</div>
                             <div>REVENUE</div>
                             <div>STOCK STATUS</div>
                         </div>
 
-                        <div style="display: flex; align-items: center; gap: 16px;">
-    
-                        <div style="width: 48px; height: 48px; background-color: #F0F6FF; border-radius: 12px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
-                            <img src="../assets/images/shirt.png" alt="Aero-Cool Tee" style="width: 28px; height: 28px; object-fit: contain;">
+                        <div style="display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; align-items: center; padding: 16px; border-bottom: 1px solid #F1F5F9;">
+                            
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 48px; height: 48px; border-radius: 8px; background-color: #F8FAFC; overflow: hidden; flex-shrink: 0;">
+                                    <img src="../assets/images/shirt.png" alt="Aero-Cool Tee" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Aero-Cool Runner Tee</div>
+                                    <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: RUN-001-BL</div>
+                                </div>
+                            </div>
+
+                            <div style="color: #475569; font-size: 14px;">Apparel - Shirts</div>
+
+                            <div style="font-weight: 600; color: #0F172A; font-size: 15px;">$12,450.00</div>
+
+                            <div>
+                                <span style="background-color: #DCFCE7; color: #16A34A; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">In Stock</span>
+                            </div>
                         </div>
-                        
-                        <div>
-                            <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Aero-Cool Runner Tee</div>
-                            <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: RUN-001-BL</div>
+
+                        <div style="display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; align-items: center; padding: 16px;">
+                            
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 48px; height: 48px; border-radius: 8px; background-color: #F8FAFC; overflow: hidden; flex-shrink: 0;">
+                                    <img src="../assets/images/pro2.png" alt="Compression Tights" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; color: #0F172A; font-size: 15px;">Pro-Flex Tights</div>
+                                    <div style="color: #64748B; font-size: 13px; margin-top: 2px;">SKU: PNT-002-BL</div>
+                                </div>
+                            </div>
+
+                            <div style="color: #475569; font-size: 14px;">Apparel - Pants</div>
+
+                            <div style="font-weight: 600; color: #0F172A; font-size: 15px;">$8,320.00</div>
+
+                            <div>
+                                <span style="background-color: #FEF3C7; color: #D97706; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Low Stock</span>
+                            </div>
                         </div>
-                    </div>
+
                     </div>
                 </div>
 

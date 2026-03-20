@@ -145,13 +145,44 @@ function updateProductData(filterType) {
 
 //Customer Insight page functions
 function initInsightsCharts() {
-    const regionalOptions = { series: [{ name: 'Orders', data: mockDataInsights['30D'].regionalBar }], chart: { type: 'bar', height: 240, width: '100%', toolbar: { show: false }, fontFamily: 'inherit' }, plotOptions: { bar: { borderRadius: 4, columnWidth: '80%', distributed: true } }, colors: ['#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#E2E8F0'], dataLabels: { enabled: false }, xaxis: { categories: ['New York', 'California', 'Texas', 'Florida', 'Others'], axisBorder: { show: false }, axisTicks: { show: false }, labels: { style: { colors: '#94A3B8', fontSize: '11px', fontWeight: 500 } } }, yaxis: { show: false }, grid: { show: false }, legend: { show: false } };
+    const regionalOptions = { series: 
+        [{ name: 'Orders', data: mockDataInsights['30D'].regionalBar }], 
+        chart: { type: 'bar', height: 240, 
+            width: '100%', toolbar: { show: false }, 
+            fontFamily: 'inherit' }, 
+            plotOptions: { bar: { borderRadius: 4, columnWidth: '80%', distributed: true } }, 
+            colors: ['#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#E2E8F0'], 
+            dataLabels: { enabled: false }, 
+            xaxis: { categories: ['New York', 'California', 'Texas', 'Florida', 'Others'], 
+                axisBorder: { show: false }, axisTicks: { show: false }, 
+                labels: { style: { colors: '#94A3B8', fontSize: '11px', fontWeight: 500 } } }, 
+                yaxis: { show: false }, grid: { show: false }, legend: { show: false } };
     charts.insightsBar = new ApexCharts(document.querySelector("#regionalChart"), regionalOptions); charts.insightsBar.render();
 
-    const donutOptions = { series: mockDataInsights['30D'].newReturningDonut, labels: ['Returning Customers', 'New Customers'], chart: { type: 'donut', height: 220, width: '100%', fontFamily: 'inherit' }, colors: ['#3B82F6', '#E2E8F0'], plotOptions: { pie: { donut: { size: '75%', labels: { show: true, name: { show: true, fontSize: '10px', color: '#64748B', offsetY: 20 }, value: { show: true, fontSize: '28px', fontWeight: 700, color: '#0F172A', offsetY: -10, formatter: (val) => val + "%" }, total: { show: true, showAlways: true, label: 'RETURNING', color: '#64748B', fontSize: '10px', formatter: function (w) { return w.globals.seriesTotals[0] + "%" } } } } } }, dataLabels: { enabled: false }, stroke: { show: false }, 
-    legend: { show: false } // Đã tắt Legend mặc định
+    const donutOptions = 
+    { series: mockDataInsights['30D'].newReturningDonut, 
+        labels: ['Returning Customers', 'New Customers'], 
+        chart: { type: 'donut', height: 220, width: '100%', fontFamily: 'inherit' }, 
+        colors: ['#3B82F6', '#E2E8F0'], 
+        plotOptions: 
+        { pie: 
+            { donut: 
+                { size: '75%', labels: 
+                    { show: true, name: 
+                        { show: true, fontSize: '10px', color: '#64748B', offsetY: 20 },
+                         value: 
+                         { show: true, fontSize: '28px', fontWeight: 700, 
+                            color: '#0F172A', offsetY: -10, 
+                            formatter: (val) => val + "%" }, 
+                            total: { show: true, showAlways: true, 
+                                label: 'RETURNING', color: '#64748B', 
+                                fontSize: '10px', formatter: function (w) 
+                                { return w.globals.seriesTotals[0] + "%" } } } } } }, 
+                                dataLabels: { enabled: false }, stroke: { show: false },
+                                legend: { show: false } // Đã tắt Legend mặc định
     };
-    charts.insightsDonut = new ApexCharts(document.querySelector("#newReturningChart"), donutOptions); charts.insightsDonut.render();
+    charts.insightsDonut = new ApexCharts(document.querySelector("#newReturningChart"), 
+    donutOptions); charts.insightsDonut.render();
 }
 
 function updateInsightsData(filterType) {
